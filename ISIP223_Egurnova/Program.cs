@@ -10,6 +10,7 @@ namespace ISIP223_Egurnova
     {
         static void Main(string[] args)
         {
+            int f = 0;
         }
     }
 }
