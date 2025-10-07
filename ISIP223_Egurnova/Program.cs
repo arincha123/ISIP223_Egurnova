@@ -45,6 +45,21 @@ namespace ISIP223_Egurnova
             Console.WriteLine(book.Id + "\t" + book.Title + "\t\t" + book.Author + "\t" + book.BookGenre + "\t\t" + book.Year + "\t" + book.Price);
         }
 
+        public static void ShowAll()
+        {
+            Console.WriteLine("--- Все книги ---");
+            if (books.Count == 0)
+            {
+                Console.WriteLine("Товары отсутствуют.");
+                return;
+            }
+
+            foreach (Book book in books)
+            {
+                Print(book);
+            }
+        }
+
         private static string ChooseGenre()
         {
             Console.Write("Доступные жанры:\t1. Фантастика\t2. Детектив\t3. Роман\t4. Научная литература\t5. Биография");
@@ -126,31 +141,30 @@ namespace ISIP223_Egurnova
         static void RemoveBook()
         {
             Console.WriteLine("\n=== УДАЛЕНИЕ КНИГИ ===");
-            ShowAllBooks();
+            ShowAll();
 
-            Console.Write("Введите ID книги для удаления: ");
-            if (!int.TryParse(Console.ReadLine(), out int id))
+            Console.WriteLine("Введите номер (id) товара: ");
+            int code = Convert.ToInt32(Console.ReadLine());
+
+            Book removebook = null;
+            for (int i = 0; i < books.Count; i++)
             {
-                Console.WriteLine("Неверный формат ID!");
-                return;
+                if (code == books[i].Id)
+                {
+                    removebook = books[i];
+                    break;
+                }
             }
 
-            var bookToRemove = books.FirstOrDefault(b => b.Id == id);
-            if (bookToRemove != null)
+            if (removebook != null)
             {
-                books.Remove(bookToRemove);
-                Console.WriteLine($"Книга '{bookToRemove.Title}' успешно удалена!");
+                books.Remove(removebook);
+                Console.WriteLine("Товар успешно удален!");
             }
             else
             {
-                Console.WriteLine("Книга с указанным ID не найдена!");
+                Console.WriteLine("Товар с указанным ID не найден.");
             }
-        }
-
-        static void ShowAllBooks()
-        {
-            Console.WriteLine("\n=== ВСЕ КНИГИ ===");
-            DisplayBooks(books);
         }
 
         static void SearchBooks()
