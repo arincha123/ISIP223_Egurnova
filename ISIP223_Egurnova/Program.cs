@@ -10,25 +10,16 @@ namespace ISIP223_Egurnova
     {
         static List<Book> books = new List<Book>();
 
-        public enum Genre
-        {
-            Фантастика = 1,
-            Детектив = 2,
-            Роман = 3,
-            НаучнаяЛитература = 4,
-            Биография = 5
-        }
-
         class Book
         {
             public int Id { get; set; }
             public string Title { get; set; }
             public string Author { get; set; }
-            public Genre BookGenre { get; set; }
+            public string BookGenre { get; set; }
             public int Year { get; set; }
             public decimal Price { get; set; }
 
-            public Book(int id, string title, string author, Genre genre, int year, decimal price)
+            public Book(int id, string title, string author, string genre, int year, decimal price)
             {
                 Id = id;
                 Title = title;
@@ -38,48 +29,32 @@ namespace ISIP223_Egurnova
                 Price = price;
             }
 
-            public override string ToString()
+            public enum Genre
             {
-                return $"ID: {Id}, Название: {Title}, Автор: {Author}, Жанр: {BookGenre}, Год: {Year}, Цена: {Price:C}";
+                Фантастика = 1,
+                Детектив = 2,
+                Роман = 3,
+                Научная_литература = 4,
+                Биография = 5
             }
         }
 
-        static Genre ChooseGenre()
+        private static void Print(Book book)
         {
-            Console.WriteLine("\nДоступные жанры:");
-            foreach (Genre genre in Enum.GetValues(typeof(Genre)))
-            {
-                Console.WriteLine($"{(int)genre}. {genre}");
-            }
-
-            Console.Write("Выберите жанр (номер): ");
-            if (int.TryParse(Console.ReadLine(), out int genreNumber) && Enum.IsDefined(typeof(Genre), genreNumber))
-            {
-                return (Genre)genreNumber;
-            }
-            else
-            {
-                Console.WriteLine("Неверный выбор, установлен жанр по умолчанию (Роман)");
-                return Genre.Роман;
-            }
+            Console.WriteLine("ID\tНазвание\tАвтор\tЖанр\tГод\tЦена");
+            Console.WriteLine(book.Id + "\t" + book.Title + "\t\t" + book.Author + "\t" + book.BookGenre + "\t\t" + book.Year + "\t" + book.Price);
         }
 
-        static void DisplayBooks(IEnumerable<Book> bookList)
+        private static string ChooseGenre()
         {
-            if (!bookList.Any())
-            {
-                Console.WriteLine("Книги не найдены.");
-                return;
-            }
+            Console.Write("Доступные жанры:\t1. Фантастика\t2. Детектив\t3. Роман\t4. Научная литература\t5. Биография");
+            string input = Console.ReadLine();
 
-            Console.WriteLine("\nСписок книг:");
-            Console.WriteLine("ID\tНазвание\t\tАвтор\t\tЖанр\t\tГод\tЦена");
-            Console.WriteLine(new string('-', 80));
-
-            foreach (var book in bookList)
-            {
-                Console.WriteLine($"{book.Id}\t{book.Title,-15}\t{book.Author,-15}\t{book.BookGenre,-15}\t{book.Year}\t{book.Price:C}");
-            }
+            if (input == "2") return Book.Genre.Детектив.ToString();
+            if (input == "3") return Book.Genre.Роман.ToString();
+            if (input == "4") return Book.Genre.Научная_литература.ToString();
+            if (input == "5") return Book.Genre.Биография.ToString();
+            return Book.Genre.Фантастика.ToString();
         }
 
         static void AddBook()
@@ -104,7 +79,8 @@ namespace ISIP223_Egurnova
                     return;
                 }
 
-                Genre genre = ChooseGenre();
+                Console.Write("Введите жанр книги: ");
+                string genre = ChooseGenre();
 
                 Console.Write("Введите год издания: ");
                 if (!int.TryParse(Console.ReadLine(), out int year) || year < 1000 || year > DateTime.Now.Year)
@@ -138,9 +114,8 @@ namespace ISIP223_Egurnova
 
                 Book newBook = new Book(newid, title, author, genre, year, price);
                 books.Add(newBook);
+                Console.WriteLine($"\nКнига успешно добавлена! ID");
 
-                Console.WriteLine($"\nКнига успешно добавлена! ID: {newid}");
-                Console.WriteLine(newBook);
             }
             catch (Exception ex)
             {
