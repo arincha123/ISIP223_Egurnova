@@ -41,8 +41,15 @@ namespace ISIP223_Egurnova
 
         private static void Print(Book book)
         {
-            Console.WriteLine("ID\tНазвание\tАвтор\tЖанр\tГод\tЦена");
-            Console.WriteLine(book.Id + "\t" + book.Title + "\t\t" + book.Author + "\t" + book.BookGenre + "\t\t" + book.Year + "\t" + book.Price);
+            Console.WriteLine($"ID: {book.Id}\tНазвание: {book.Title}\tАвтор: {book.Author}\tЖанр: {book.BookGenre}\tГод: {book.Year}\tЦена: {book.Price}");
+        }
+
+        private static void Print(List<Book> books)
+        {
+            foreach (var book in books)
+            {
+                Console.WriteLine($"ID: {book.Id}\tНазвание: {book.Title}\tАвтор: {book.Author}\tЖанр: {book.BookGenre}\tГод: {book.Year}\tЦена: {book.Price}");
+            }
         }
 
         public static void ShowAll()
@@ -175,10 +182,15 @@ namespace ISIP223_Egurnova
             Console.WriteLine("3. По жанру");
             Console.Write("Выберите тип поиска: ");
 
-            if (!int.TryParse(Console.ReadLine(), out int searchType))
+            int s = Convert.ToInt32(Console.ReadLine());
+
+            switch (s)
             {
-                Console.WriteLine("Неверный выбор!");
-                return;
+                case 1:
+                    
+
+                    break;
+
             }
 
         }
