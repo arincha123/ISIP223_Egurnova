@@ -57,7 +57,7 @@ namespace ISIP223_Egurnova
             Console.WriteLine("--- Все книги ---");
             if (books.Count == 0)
             {
-                Console.WriteLine("Товары отсутствуют.");
+                Console.WriteLine("Книги отсутствуют.");
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace ISIP223_Egurnova
 
         private static string ChooseGenre()
         {
-            Console.Write("Доступные жанры:\t1. Фантастика\t2. Детектив\t3. Роман\t4. Научная литература\t5. Биография");
+            Console.Write("Доступные жанры:\n1. Фантастика\n2. Детектив\n3. Роман\n4. Научная литература\n5. Биография\n");
             string input = Console.ReadLine();
 
             if (input == "2") return Book.Genre.Детектив.ToString();
@@ -166,16 +166,21 @@ namespace ISIP223_Egurnova
                     Console.Write("Введите название: ");
                     string title = Console.ReadLine();
                     sr = books.Where(b => b.Title.ToLower().Contains(title.ToLower())).ToList();
+                    Print(sr);
+
                     break;
                 case 2:
                     Console.Write("Введите автора: ");
                     string author = Console.ReadLine();
                     sr = books.Where(b => b.Author.ToLower().Contains(author.ToLower())).ToList();
+                    Print(sr);
+                    
                     break;
                 case 3:
                     Console.Write("Введите жанр: ");
                     string genre = Console.ReadLine();
                     sr = books.Where(b => b.BookGenre.ToLower().Contains(genre.ToLower())).ToList();
+                    Print(sr);
                     break;
                 default:
                     Console.WriteLine("Неверный выбор!");
@@ -214,20 +219,43 @@ namespace ISIP223_Egurnova
         static void ShowPriceExtremes()
         {
             Console.WriteLine("\n=== САМАЯ ДОРОГАЯ И ДЕШЁВАЯ КНИГА ===");
+
+            if (books.Count == 0)
+            {
+                Console.WriteLine("Нет книг в библиотеке");
+                return;
+            }
+
+            var che = books.OrderBy(b => b.Price).First();
+            var exp = books.OrderByDescending(b => b.Price).First();
+
+            Console.WriteLine("Самая дешёвая книга: ");
+            Print(che);
+
+            Console.WriteLine("Самая дорогая книга: ");
+            Print(exp);
+
         }
 
         static void GroupByAuthors()
         {
             Console.WriteLine("\n=== ГРУППИРОВКА ПО АВТОРАМ ===");
+            var groupa = books.GroupBy(b => b.Author);
+
+            foreach (var group in groupa)
+            {
+                Console.WriteLine($"Автор: {group.Key}, Количество книг: {group.Count()}");
+            }
+
         }
 
         static void Main(string[] args)
         {
-            books.Add(new Book(1, "Мастер и Маргарита", "Михаил Булгаков", Genre.Роман, 1966, 450m));
-            books.Add(new Book(2, "Преступление и наказание", "Фёдор Достоевский", Genre.Роман, 1866, 380m));
-            books.Add(new Book(3, "1984", "Джордж Оруэлл", Genre.Фантастика, 1949, 520m));
-            books.Add(new Book(4, "Убийство в Восточном экспрессе", "Агата Кристи", Genre.Детектив, 1934, 390m));
-            books.Add(new Book(5, "Собачье сердце", "Михаил Булгаков", Genre.Фантастика, 1925, 420m));
+            books.Add(new Book(1, "Тихий Дон", "Михаил Шолохов", "Роман", 1941, 450));
+            books.Add(new Book(2, "Робинзон Крузо", "Даниэля Дефо", "Роман", 1719, 380));
+            books.Add(new Book(3, "451 градус по Фаренгейту", "Рэй Брэдбери", "Фантастика", 1953, 399));
+            books.Add(new Book(4, "Преступление и наказание", "Федор Достоевский", "Детектив", 1866, 229));
+            books.Add(new Book(5, "Собачье сердце", "Михаил Булгаков", "Фантастика", 1925, 79));
 
 
             int a = -1;
@@ -268,7 +296,7 @@ namespace ISIP223_Egurnova
                         GroupByAuthors();
                         break;
                     case 7:
-                        ShowAllBooks();
+                        ShowAll();
                         break;
                     case 0:
                         Console.WriteLine("Выход из программы...");
