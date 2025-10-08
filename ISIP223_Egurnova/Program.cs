@@ -190,6 +190,25 @@ namespace ISIP223_Egurnova
             Console.WriteLine("2. По году издания");
             Console.Write("Выберите тип сортировки: ");
 
+            int sortType = Convert.ToInt32(Console.ReadLine());
+            List<Book> sb = new List<Book>();
+
+            switch (sortType)
+            {
+                case 1:
+                    sb = books.OrderBy(b => b.Title).ToList();
+                    Console.WriteLine("Книги отсортированы по названию:");
+                    break;
+                case 2:
+                    sb = books.OrderBy(b => b.Year).ToList();
+                    Console.WriteLine("Книги отсортированы по году издания:");
+                    break;
+                default:
+                    Console.WriteLine("Неверный выбор!");
+                    return;
+            }
+
+            Print(sb);
         }
 
         static void ShowPriceExtremes()
