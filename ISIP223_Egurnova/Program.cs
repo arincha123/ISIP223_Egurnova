@@ -15,6 +15,7 @@ namespace ISIP223_Egurnova
 
         public Person(string fio, DateTime birthday, string gender)
         {
+            int ID = 1;
             FIO = fio;
             Birthday = birthday;
             Gender = gender;
@@ -29,26 +30,27 @@ namespace ISIP223_Egurnova
 
     class Student : Person
     {
-        private int ID;
-        private int CourseNum;
+        public List<Courses> courses;
 
-        public Student(int id, string fio, DateTime birthday, string gender, int CN)
+        public Student(int id, string fio, DateTime birthday, string gender)
             : base(fio, birthday, gender)
         {
-            ID = id;
-            CourseNum = CN;
+            int newId = id;
+            newId++;
+            Courses courses = new Courses();
         }
 
-        public void Print()
+        public override void Print()
         {
             base.Print();
-            Console.WriteLine($"ID: {ID}\nНомер курса: {CourseNum}");
+            Console.WriteLine($"ID: {newid}\nНомер курса: {CourseNum}");
         }
 
     }
 
     class Teacher : Person
     {
+        public List <Courses> courses;
 
     }
 
