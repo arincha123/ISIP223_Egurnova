@@ -359,7 +359,109 @@ namespace ISIP223_Egurnova
             }
         }
 
+        // Управление преподавателями
 
+        public void AddTeach()
+        {
+            Console.Write("ФИО: ");
+            string fio = Console.ReadLine();
+            Console.Write("Дата рождения (дд.мм.гггг): ");
+            DateTime birthday = DateTime.Parse(Console.ReadLine());
+            Console.Write("Пол: ");
+            string gender = Console.ReadLine();
+
+            var teacher = new Teacher(teacherIdCounter++, fio, birthday, gender);
+            teachers.Add(teacher);
+            Console.WriteLine($"Преподаватель добавлен: {fio}");
+        }
+
+        public void RemTeach()
+        {
+            ShowAllTeach();
+            Console.Write("ID преподавателя для удаления: ");
+            int teacherId = Convert.ToInt32(Console.ReadLine());
+
+            var teacher = teachers.FirstOrDefault(t => t.ID == teacherId);
+            if (teacher != null)
+            {
+                foreach (var course in teacher.Courses.ToList())
+                {
+                    LeaveCo(teacher, course);
+                }
+                teachers.Remove(teacher);
+                Console.WriteLine($"Преподаватель удален: {teacher.FIO}");
+            }
+            else
+            {
+                Console.WriteLine("Преподаватель не найден");
+            }
+        }
+
+        public void SignUpT()
+        {
+            ShowAllTeach();
+            Console.Write("ID преподавателя: ");
+            int teacherId = Convert.ToInt32(Console.ReadLine());
+
+            ShowAllCour();
+            Console.Write("ID курса: ");
+            int courseId = Convert.ToInt32(Console.ReadLine());
+
+            var teacher = teachers.FirstOrDefault(t => t.ID == teacherId);
+            var course = courses.FirstOrDefault(c => c.ID == courseId);
+
+            if (teacher != null && course != null)
+            {
+                if (!teacher.Courses.Contains(course))
+                {
+                    teacher.Courses.Add(course);
+                    course.Teacher = teacher;
+                    Console.WriteLine($"Преподаватель {teacher.FIO} назначен на курс: {course.Name}");
+                }
+                else
+                {
+                    Console.WriteLine($"Преподаватель {teacher.FIO} уже ведет курс: {course.Name}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Преподаватель или курс не найден");
+            }
+        }
+
+        private void LeaveCo(Teacher teacher, Course course)
+        {
+            if (teacher.Courses.Contains(course))
+            {
+                teacher.Courses.Remove(course);
+                course.Teacher = null;
+                Console.WriteLine($"Преподаватель {teacher.FIO} удален с курса: {course.Name}");
+            }
+        }
+
+        public void LeaveCo()
+        {
+            ShowAllStud();
+            Console.Write("ID преподавателя: ");
+            int i = Convert.ToInt32(Console.ReadLine());
+
+            ShowAllCour();
+            Console.Write("ID курса: ");
+            int co = Convert.ToInt32(Console.ReadLine());
+
+            var teacher = students.FirstOrDefault(s => s.ID == i);
+            var course = courses.FirstOrDefault(c => c.ID == co);
+
+            if (teacher != null && course != null)
+            {
+                LeaveC(teacher, course);
+            }
+            else
+            {
+                Console.WriteLine("Преподаватель или курс не найден");
+            }
+
+        }
 
 
 
