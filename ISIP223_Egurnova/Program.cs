@@ -254,6 +254,118 @@ namespace ISIP223_Egurnova
             }
         }
 
+        // Управление студентами
+
+        public void AddStud()
+        {
+            Console.Write("ФИО: ");
+            string fio = Console.ReadLine();
+            Console.Write("Дата рождения (дд.мм.гггг): ");
+            DateTime birthday = DateTime.Parse(Console.ReadLine());
+            Console.Write("Пол: ");
+            string gender = Console.ReadLine();
+
+            var student = new Student(studentIdCounter++, fio, birthday, gender);
+            students.Add(student);
+            Console.WriteLine($"Студент добавлен: {fio}");
+        }
+
+        public void RemStud()
+        {
+            ShowAllStud();
+            Console.Write("ID студента для удаления: ");
+            int studentId = Convert.ToInt32(Console.ReadLine());
+
+            var student = students.FirstOrDefault(s => s.ID == studentId);
+            if (student != null)
+            {
+                foreach (var course in student.Courses.ToList())
+                {
+                    LeaveC(student, course);
+                }
+                students.Remove(student);
+                Console.WriteLine($"Студент удален: {student.FIO}");
+            }
+            else
+            {
+                Console.WriteLine("Студент не найден");
+            }
+        }
+
+        public void SignUpC()
+        {
+            ShowAllStud();
+            Console.Write("ID студента: ");
+            int i = Convert.ToInt32(Console.ReadLine());
+
+            ShowAllCour();
+            Console.Write("ID курса: ");
+            int co = Convert.ToInt32(Console.ReadLine());
+
+            var student = students.FirstOrDefault(s => s.ID == i);
+            var course = courses.FirstOrDefault(c => c.ID == co);
+
+            if (student != null && course != null)
+            {
+                if (!student.Courses.Contains(course))
+                {
+                    student.Courses.Add(course);
+                    course.Students.Add(student);
+                    Console.WriteLine($"Студент {student.FIO} записан на курс: {course.Name}");
+                }
+                else
+                {
+                    Console.WriteLine($"Студент {student.FIO} уже записан на курс: {course.Name}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Студент или курс не найден");
+            }
+
+        }
+
+        public void LeaveC(Student student, Course course)
+        {
+            if (student.Courses.Contains(course))
+            {
+                student.Courses.Remove(course);
+                course.Students.Remove(student);
+                Console.WriteLine($"Студент {student.FIO} отчислен с курса: {course.Name}");
+            }
+
+        }
+
+        public void LeaveC()
+        {
+            ShowAllStud();
+            Console.Write("ID студента: ");
+            int studentId = Convert.ToInt32(Console.ReadLine());
+
+            ShowAllCour();
+            Console.Write("ID курса: ");
+            int courseId = Convert.ToInt32(Console.ReadLine());
+
+            var student = students.FirstOrDefault(s => s.ID == studentId);
+            var course = courses.FirstOrDefault(c => c.ID == courseId);
+
+            if (student != null && course != null)
+            {
+                LeaveC(student, course);
+            }
+            else
+            {
+                Console.WriteLine("Студент или курс не найден");
+            }
+        }
+
+
+
+
+
+
+
+
 
     }
 
