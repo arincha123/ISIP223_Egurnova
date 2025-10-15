@@ -187,7 +187,22 @@ namespace ISIP223_Egurnova
 
     class System
     {
+        private List<Student> students;
+        private List<Teacher> teachers;
+        private List<Course> courses;
+        private int studentIdCounter;
+        private int teacherIdCounter;
+        private int courseIdCounter;
 
+        public System()
+        {
+            students = new List<Student>();
+            teachers = new List<Teacher>();
+            courses = new List<Course>();
+            studentIdCounter = 1;
+            teacherIdCounter = 1;
+            courseIdCounter = 1;
+        }
     }
 
 
