@@ -203,6 +203,58 @@ namespace ISIP223_Egurnova
             teacherIdCounter = 1;
             courseIdCounter = 1;
         }
+
+        // Вывод списков классов
+
+        public void ShowAllStud()
+        {
+            Console.WriteLine("\n=== ВСЕ СТУДЕНТЫ ===");
+            if (students.Count == 0)
+            {
+                Console.WriteLine("Студентов нет");
+            }
+            else
+            {
+                foreach (var student in students)
+                {
+                    student.Print();
+                }
+            }
+        }
+
+        public void ShowAllTeach()
+        {
+            Console.WriteLine("\n=== ВСЕ ПРЕПОДАВАТЕЛИ ===");
+            if (teachers.Count == 0)
+            {
+                Console.WriteLine("Преподавателей нет");
+            }
+            else
+            {
+                foreach (var teacher in teachers)
+                {
+                    teacher.Print();
+                }
+            }
+        }
+
+        public void ShowAllCour()
+        {
+            Console.WriteLine("\n=== ВСЕ КУРСЫ ===");
+            if (courses.Count == 0)
+            {
+                Console.WriteLine("Курсов нет");
+            }
+            else
+            {
+                foreach (var course in courses)
+                {
+                    course.Print();
+                }
+            }
+        }
+
+
     }
 
 
