@@ -463,12 +463,43 @@ namespace ISIP223_Egurnova
 
         }
 
+        public void AddCour()
+        {
+            Console.Write("Название курса: ");
+            string name = Console.ReadLine();
 
+            var course = new Course(courseIdCounter++, name);
+            courses.Add(course);
+            Console.WriteLine($"Курс создан: {name} (ID: {course.ID})");
+        }
 
+        public void RemCour()
+        {
+            ShowAllCour();
+            Console.Write("ID курса для удаления: ");
+            int courseId = Convert.ToInt32(Console.ReadLine());
 
+            var course = courses.FirstOrDefault(c => c.ID == courseId);
+            if (course != null)
+            {
+                foreach (var student in course.Students.ToList())
+                {
+                    student.Courses.Remove(course);
+                }
 
+                if (course.Teacher != null)
+                {
+                    course.Teacher.Courses.Remove(course);
+                }
 
-
+                courses.Remove(course);
+                Console.WriteLine($"Курс удален: {course.Name}");
+            }
+            else
+            {
+                Console.WriteLine("Курс не найден");
+            }
+        }
     }
 
 
