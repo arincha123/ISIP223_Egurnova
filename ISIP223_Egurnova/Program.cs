@@ -8,56 +8,180 @@ namespace ISIP223_Egurnova
 { 
     class Person
     {
-        private int ID {  get; set; }
-        private string FIO { get; set; }
-        private DateTime Birthday {  get; set; }
-        private string Gender {  get; set; }
+        public int ID { get; set; }
+        public string FIO { get; set; }
+        public DateTime Birthday { get; set; }
+        public string Gender { get; set; }
 
-        public Person(string fio, DateTime birthday, string gender)
+        public Person(int id, string fio, DateTime birthday, string gender)
         {
-            int ID = 1;
+            ID = id;
             FIO = fio;
             Birthday = birthday;
             Gender = gender;
         }
 
-        public void Print()
+        public virtual void Print()
         {
-            Console.WriteLine($"ФИО: {FIO}\nДата рождения: {Birthday}\nПол: {Gender}");
+            Console.WriteLine($"ID: {ID}");
+            Console.WriteLine($"ФИО: {FIO}");
+            Console.WriteLine($"Дата рождения: {Birthday:dd.MM.yyyy}");
+            Console.WriteLine($"Пол: {Gender}");
+        }
+
+        public int GetAge()
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - Birthday.Year;
+            if (Birthday.Date > today.AddYears(-age)) age--;
+            return age;
+        }
+
+        public static DateTime EnterBirthdayManual()
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.Write("Введите дату рождения (дд.мм.гггг): ");
+                    string input = Console.ReadLine();
+
+                    DateTime birthday = DateTime.ParseExact(input, "dd.MM.yyyy", null);
+
+                    if (birthday > DateTime.Today)
+                    {
+                        Console.WriteLine("Дата рождения не может быть в будущем! Попробуйте снова.");
+                        continue;
+                    }
+
+                    if (birthday < DateTime.Today.AddYears(-100))
+                    {
+                        Console.WriteLine("Возраст слишком большой! Попробуйте снова.");
+                        continue;
+                    }
+
+                    return birthday;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Неверный формат! Введите дату в формате дд.мм.гггг (например, 15.05.2000)");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}. Попробуйте снова.");
+                }
+            }
         }
     }
 
 
     class Student : Person
     {
-        public List<Courses> courses;
+        public List <Course> Courses { get; set; }
 
         public Student(int id, string fio, DateTime birthday, string gender)
-            : base(fio, birthday, gender)
+            : base(id, fio, birthday, gender)
         {
-            int newId = id;
-            newId++;
-            Courses courses = new Courses();
+            Courses = new List<Course>();
         }
 
         public override void Print()
         {
             base.Print();
-            Console.WriteLine($"ID: {newid}\nНомер курса: {CourseNum}");
+            Console.WriteLine($"Возраст: {GetAge()}");
+            Console.WriteLine("Курсы:");
+            if (Courses.Count == 0)
+            {
+                Console.WriteLine("  Не записан на курсы");
+            }
+            else
+            {
+                foreach (var course in Courses)
+                {
+                    Console.WriteLine($"  - {course.Name}");
+                }
+            }
+            Console.WriteLine();
         }
 
     }
 
     class Teacher : Person
     {
-        public List <Courses> courses;
+        public List<Course> Courses { get; set; }
+
+        public Teacher(int id, string fio, DateTime birthday, string gender)
+            : base(id, fio, birthday, gender)
+        {
+            Courses = new List<Course>();
+        }
+
+        public override void Print()
+        {
+            base.Print();
+            Console.WriteLine($"Возраст: {GetAge()}");
+            Console.WriteLine("Ведет курсы:");
+            if (Courses.Count == 0)
+            {
+                Console.WriteLine("  Не назначен на курсы");
+            }
+            else
+            {
+                foreach (var course in Courses)
+                {
+                    Console.WriteLine($"  - {course.Name}");
+                }
+            }
+            Console.WriteLine();
+        }
 
     }
 
 
-    class Courses
+    class Course
     {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public Teacher Teacher { get; set; }
+        public List<Student> Students { get; set; }
 
+        public Course(int id, string name)
+        {
+            ID = id;
+            Name = name;
+            Teacher = null;
+            Students = new List<Student>();
+        }
+
+        public void Print()
+        {
+            Console.WriteLine($"ID курса: {ID}");
+            Console.WriteLine($"Название: {Name}");
+
+            if (Teacher != null)
+            {
+                Console.WriteLine($"Преподаватель: {Teacher.FIO}");
+            }
+            else
+            {
+                Console.WriteLine("Преподаватель: Не назначен");
+            }
+
+            Console.WriteLine($"Количество студентов: {Students.Count}");
+            Console.WriteLine("Студенты:");
+            if (Students.Count == 0)
+            {
+                Console.WriteLine("  Нет записанных студентов");
+            }
+            else
+            {
+                foreach (var student in Students)
+                {
+                    Console.WriteLine($"  - {student.FIO}");
+                }
+            }
+            Console.WriteLine();
+        }
     }
 
 
