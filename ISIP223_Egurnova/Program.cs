@@ -487,7 +487,39 @@ namespace ISIP223_Egurnova
             }
         }
 
+        private void EncounterEnemy()
+        {
+            Enemy enemy;
 
+            if (turnCount % 10 == 0)
+            {
+                int bossType = random.Next(0, 4);
+                switch (bossType)
+                {
+                    case 0: enemy = new BossVVG(); break;
+                    case 1: enemy = new BossKovalsky(); break;
+                    case 2: enemy = new BossArchmage(); break;
+                    case 3: enemy = new BossPestov(); break;
+                    default: enemy = new BossVVG(); break;
+                }
+                ConsoleHelper.WriteLineColor($"\n!!! Появляется БОСС - {enemy.Name} !!!", ConsoleColors.BossColor);
+            }
+            else
+            {
+                int enemyType = random.Next(0, 3);
+                switch (enemyType)
+                {
+                    case 0: enemy = new Goblin(); break;
+                    case 1: enemy = new Skeleton(); break;
+                    case 2: enemy = new Mage(); break;
+                    default: enemy = new Goblin(); break;
+                }
+                ConsoleHelper.WriteLineColor($"\nПоявляется враг - {enemy.Name}!", ConsoleColors.EnemyColor);
+            }
+
+            ConsoleHelper.WriteLineColor(enemy.ToString(), ConsoleColors.EnemyColor);
+            Battle(enemy);
+        }
 
 
 
