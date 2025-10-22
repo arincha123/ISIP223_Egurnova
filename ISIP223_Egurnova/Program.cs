@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace ISIP223_Egurnova
 {
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Game game = new Game();
+            game.Start();
+        }
+    }
+
     public enum WeaponType
     {
         Melee,
@@ -189,9 +198,9 @@ namespace ISIP223_Egurnova
         public Goblin()
         {
             Name = "Гоблин";
-            MaxHP = 30;
-            CurrentHP = 30;
-            Attack = 8;
+            MaxHP = 15;
+            CurrentHP = 15;
+            Attack = 4;
             Defense = 2;
         }
 
@@ -247,9 +256,9 @@ namespace ISIP223_Egurnova
         public Skeleton()
         {
             Name = "Скелет";
-            MaxHP = 25;
-            CurrentHP = 25;
-            Attack = 10;
+            MaxHP = 20;
+            CurrentHP = 20;
+            Attack = 8;
             Defense = 3;
         }
 
@@ -309,7 +318,7 @@ namespace ISIP223_Egurnova
             Name = "Маг";
             MaxHP = 20;
             CurrentHP = 20;
-            Attack = 12;
+            Attack = 10;
             Defense = 1;
         }
 
@@ -450,7 +459,7 @@ namespace ISIP223_Egurnova
             ConsoleHelper.WriteLineColor("Каждые 10 ходов вас ждёт встреча с боссом!\n", ConsoleColors.WarningColor);
 
             while (player.IsAlive())
-            {
+            { 
                 turnCount++;
                 ConsoleHelper.PrintSeparator();
                 ConsoleHelper.WriteLineColor($"=== Ход {turnCount} ===", ConsoleColors.SystemColor);
@@ -671,47 +680,12 @@ namespace ISIP223_Egurnova
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-
-        internal class Program
-    {
-        static void Main(string[] args)
+        private void ContinueGame()
         {
+            {
+                Console.WriteLine("\nНажмите любую клавишу для продолжения...");
+                Console.ReadKey();
+            }
         }
     }
 }
