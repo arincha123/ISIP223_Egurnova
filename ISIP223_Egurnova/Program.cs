@@ -521,7 +521,96 @@ namespace ISIP223_Egurnova
             Battle(enemy);
         }
 
+        private void Battle(Enemy enemy)
+        {
+            while (player.IsAlive() && enemy.IsAlive())
+            {
+                ConsoleHelper.WriteLineColor("\nВаш ход:", ConsoleColors.MenuColor);
+                ConsoleHelper.WriteLineColor("1 - Атаковать", ConsoleColors.MenuColor);
+                ConsoleHelper.WriteLineColor("2 - Защищаться", ConsoleColors.MenuColor);
+                ConsoleHelper.WriteColor("Выберите действие: ", ConsoleColors.InputColor);
 
+                string input = Console.ReadLine();
+                bool usedDefense = false;
+
+                if (input == "1")
+                {
+                    int playerDamage = player.GetAttack();
+                    enemy.TakeDamage(playerDamage);
+                    ConsoleHelper.WriteLineColor($"Вы наносите {playerDamage} урона!", ConsoleColors.DamageColor);
+                }
+                else if (input == "2")
+                {
+                    usedDefense = true;
+                    ConsoleHelper.WriteLineColor("Вы готовитесь к защите...", ConsoleColors.SystemColor);
+                }
+                else
+                {
+                    ConsoleHelper.WriteLineColor("Неверный ввод, вы пропускаете ход!", ConsoleColors.WarningColor);
+                }
+
+                if (!enemy.IsAlive())
+                {
+                    ConsoleHelper.WriteLineColor($"\n{enemy.Name} повержен!", ConsoleColors.SystemColor);
+                    return;
+                }
+
+                ConsoleHelper.WriteLineColor($"\nХод {enemy.Name}:", ConsoleColors.EnemyColor);
+
+                int enemyDamage = enemy.GetDamage(player, usedDefense);
+                int finalDamage = enemyDamage;
+
+                if (usedDefense)
+                {
+                    int dodgeRoll = random.Next(0, 10);
+                    if (dodgeRoll < 4)
+                    {
+                        ConsoleHelper.WriteLineColor("Вы успешно уклонились от атаки!", ConsoleColors.HealColor);
+                        finalDamage = 0;
+                    }
+                    else
+                    {
+                        int blockPower = random.Next(0, 4);
+                        double blockPercent = 0;
+                        switch (blockPower)
+                        {
+                            case 0: blockPercent = 0.7; break;
+                            case 1: blockPercent = 0.8; break;
+                            case 2: blockPercent = 0.9; break;
+                            case 3: blockPercent = 1.0; break;
+                            default: blockPercent = 0.8; break;
+                        }
+                        int blockedDamage = (int)(player.GetDefense() * blockPercent);
+                        finalDamage = Math.Max(0, enemyDamage - blockedDamage);
+                        ConsoleHelper.WriteLineColor($"Вы блокируете {blockedDamage} урона!", ConsoleColors.SystemColor);
+                    }
+                }
+
+                if (finalDamage > 0)
+                {
+                    player.TakeDamage(finalDamage);
+                    ConsoleHelper.WriteLineColor($"{enemy.Name} наносит вам {finalDamage} урона!", ConsoleColors.DamageColor);
+                }
+
+                string specialEffect = enemy.Effect(player);
+                if (!string.IsNullOrEmpty(specialEffect))
+                {
+                    ConsoleHelper.WriteLineColor(specialEffect, ConsoleColors.WarningColor);
+                }
+
+                ConsoleHelper.WriteLineColor($"\nСостояние после раунда:", ConsoleColors.SystemColor);
+                ConsoleHelper.WriteLineColor(player.ToString(), ConsoleColors.PlayerColor);
+                ConsoleHelper.WriteLineColor(enemy.ToString(), ConsoleColors.EnemyColor);
+
+                if (!player.IsAlive())
+                {
+                    ConsoleHelper.WriteLineColor("\nВы пали в бою...", ConsoleColors.DamageColor);
+                    return;
+                }
+
+                ContinueGame();
+            }
+        }
 
 
 
