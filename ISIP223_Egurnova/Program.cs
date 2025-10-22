@@ -440,7 +440,52 @@ namespace ISIP223_Egurnova
             };
         }
 
+        public void Start()
+        {
+            Console.Title = "Текстовый Рогалик";
+            Console.Clear();
 
+            ConsoleHelper.WriteLineColor("Добро пожаловать в текстовый рогалик!", ConsoleColors.SystemColor);
+            ConsoleHelper.WriteLineColor("Каждый ход вы будете встречать либо сундук, либо врага.", ConsoleColors.MenuColor);
+            ConsoleHelper.WriteLineColor("Каждые 10 ходов вас ждёт встреча с боссом!\n", ConsoleColors.WarningColor);
+
+            while (player.IsAlive())
+            {
+                turnCount++;
+                ConsoleHelper.PrintSeparator();
+                ConsoleHelper.WriteLineColor($"=== Ход {turnCount} ===", ConsoleColors.SystemColor);
+                ConsoleHelper.WriteLineColor(player.ToString(), ConsoleColors.PlayerColor);
+
+                if (player.IsFrozen)
+                {
+                    ConsoleHelper.WriteLineColor("Вы заморожены и пропускаете ход!", ConsoleColors.WarningColor);
+                    player.IsFrozen = false;
+                    ContinueGame();
+                    continue;
+                }
+
+                int eventType = random.Next(0, 2);
+                switch (eventType)
+                {
+                    case 0:
+                        EncounterEnemy();
+                        break;
+                    case 1:
+                        OpenChest();
+                        break;
+                }
+
+                if (!player.IsAlive())
+                {
+                    ConsoleHelper.PrintSeparator();
+                    ConsoleHelper.WriteLineColor("=== ИГРА ОКОНЧЕНА ===", ConsoleColors.DamageColor);
+                    ConsoleHelper.WriteLineColor($"Вы продержались {turnCount} ходов.", ConsoleColors.SystemColor);
+                    break;
+                }
+
+                ContinueGame();
+            }
+        }
 
 
 
