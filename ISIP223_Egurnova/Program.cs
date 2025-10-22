@@ -612,7 +612,64 @@ namespace ISIP223_Egurnova
             }
         }
 
+        private void OpenChest()
+        {
+            ConsoleHelper.WriteLineColor("\nВы нашли сундук!", ConsoleColors.ItemColor);
 
+            int chestContent = random.Next(0, 10);
+            switch (chestContent)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    ConsoleHelper.WriteLineColor("В сундуке лечебное зелье!", ConsoleColors.HealColor);
+                    player.Heal();
+                    ConsoleHelper.WriteLineColor("Ваше здоровье полностью восстановлено!", ConsoleColors.HealColor);
+                    break;
+                default:
+                    int itemIndex = random.Next(0, possibleItems.Count);
+                    Item foundItem = possibleItems[itemIndex];
+                    ConsoleHelper.WriteLineColor($"В сундуке: {foundItem}", ConsoleColors.ItemColor);
+
+                    ConsoleHelper.WriteLineColor("\nВаша текущая экипировка:", ConsoleColors.MenuColor);
+
+                    if (foundItem is Weapon)
+                    {
+                        Weapon foundWeapon = (Weapon)foundItem;
+                        ConsoleHelper.WriteLineColor($"Оружие: {player.Weapon}", ConsoleColors.ItemColor);
+                        ConsoleHelper.WriteColor("\nХотите взять новое оружие? (y/n): ", ConsoleColors.InputColor);
+
+                        string input = Console.ReadLine().ToLower();
+                        if (input == "y" || input == "д")
+                        {
+                            player.Weapon = foundWeapon;
+                            ConsoleHelper.WriteLineColor($"Вы экипировали: {foundWeapon.Name}", ConsoleColors.SystemColor);
+                        }
+                        else
+                        {
+                            ConsoleHelper.WriteLineColor("Вы оставили оружие в сундуке.", ConsoleColors.WarningColor);
+                        }
+                    }
+                    else if (foundItem is Armor)
+                    {
+                        Armor foundArmor = (Armor)foundItem;
+                        ConsoleHelper.WriteLineColor($"Броня: {player.Armor}", ConsoleColors.ItemColor);
+                        ConsoleHelper.WriteColor("\nХотите взять новую броню? (y/n): ", ConsoleColors.InputColor);
+
+                        string input = Console.ReadLine().ToLower();
+                        if (input == "y" || input == "д")
+                        {
+                            player.Armor = foundArmor;
+                            ConsoleHelper.WriteLineColor($"Вы экипировали: {foundArmor.Name}", ConsoleColors.SystemColor);
+                        }
+                        else
+                        {
+                            ConsoleHelper.WriteLineColor("Вы оставили броню в сундуке.", ConsoleColors.WarningColor);
+                        }
+                    }
+                    break;
+            }
+        }
 
 
 
