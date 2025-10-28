@@ -19,6 +19,58 @@ namespace ISIP223_Egurnova
      * в изначальном меню есть пункты: принять клиента, просмотреть склад, докупить детали
      
      */
+
+    public class Client
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int ID_car { get; set; }
+
+
+
+
+    }
+
+    public class Car
+    {
+        public int ID { get; set; }
+        public string Model { get; set; }
+        public string Mark { get; set; }
+        public int ID_detail { get; set; }
+
+
+
+
+
+    }
+
+    public class Detail
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public float Price { get; set; }
+
+
+
+
+
+    }
+
+
+    public class Sklad
+    {
+
+    }
+
+    public class Game
+    {
+
+    }
+
+
+
+
+
     internal class Program
     {
         static void Main(string[] args)
