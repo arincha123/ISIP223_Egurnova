@@ -12,18 +12,19 @@ namespace ISIP223_Egurnova
     using System;
     using System.Collections.Generic;
     
-    public partial class Car
+    public partial class Sklad
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Car()
+        public Sklad()
         {
             this.Order = new HashSet<Order>();
         }
     
-        public int ID_CAR { get; set; }
-        public string Mark { get; set; }
-        public string Model { get; set; }
+        public int ID_SKLAD { get; set; }
+        public int ID_detail { get; set; }
+        public int Quantity { get; set; }
     
+        public virtual Detail Detail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Order { get; set; }
     }

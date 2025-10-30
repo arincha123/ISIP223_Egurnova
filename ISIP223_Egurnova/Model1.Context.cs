@@ -13,10 +13,10 @@ namespace ISIP223_Egurnova
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class auEntities : DbContext
+    public partial class auEntities2 : DbContext
     {
-        public auEntities()
-            : base("name=auEntities")
+        public auEntities2()
+            : base("name=auEntities2")
         {
         }
     
@@ -28,5 +28,7 @@ namespace ISIP223_Egurnova
         public virtual DbSet<Car> Car { get; set; }
         public virtual DbSet<Client> Client { get; set; }
         public virtual DbSet<Detail> Detail { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<Sklad> Sklad { get; set; }
     }
 }

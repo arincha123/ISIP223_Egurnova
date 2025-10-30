@@ -14,8 +14,17 @@ namespace ISIP223_Egurnova
     
     public partial class Detail
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Detail()
+        {
+            this.Sklad = new HashSet<Sklad>();
+        }
+    
         public int ID_DETAIL { get; set; }
         public string Name { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sklad> Sklad { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace ISIP223_Egurnova
 {
     internal class Core
     {
-        public static auEntities Context = new auEntities();
+        public static auEntities2 Context = new auEntities2();
 
     }
 }

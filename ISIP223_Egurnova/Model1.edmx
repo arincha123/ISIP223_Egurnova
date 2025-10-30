@@ -26,12 +26,96 @@
           </Key>
           <Property Name="ID_DETAIL" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID_ORDER" />
+          </Key>
+          <Property Name="ID_ORDER" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_client" Type="int" Nullable="false" />
+          <Property Name="ID_car" Type="int" Nullable="false" />
+          <Property Name="ID_detail_on_sklad" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sklad">
+          <Key>
+            <PropertyRef Name="ID_SKLAD" />
+          </Key>
+          <Property Name="ID_SKLAD" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_detail" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Order_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="ID_CAR" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ID_car" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID_CLIENT" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ID_client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Sklad">
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sklad">
+              <PropertyRef Name="ID_SKLAD" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ID_detail_on_sklad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sklad_Detail">
+          <End Role="Detail" Type="Self.Detail" Multiplicity="1" />
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Detail">
+              <PropertyRef Name="ID_DETAIL" />
+            </Principal>
+            <Dependent Role="Sklad">
+              <PropertyRef Name="ID_detail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="Хранилище auModelContainer">
           <EntitySet Name="Car" EntityType="Self.Car" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Detail" EntityType="Self.Detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sklad" EntityType="Self.Sklad" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Order_Car" Association="Self.FK_Order_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Client" Association="Self.FK_Order_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Sklad" Association="Self.FK_Order_Sklad">
+            <End Role="Sklad" EntitySet="Sklad" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sklad_Detail" Association="Self.FK_Sklad_Detail">
+            <End Role="Detail" EntitySet="Detail" />
+            <End Role="Sklad" EntitySet="Sklad" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -45,6 +129,7 @@
           <Property Name="ID_CAR" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Mark" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_Car" FromRole="Car" ToRole="Order" />
         </EntityType>
         <EntityType Name="Client">
           <Key>
@@ -52,6 +137,7 @@
           </Key>
           <Property Name="ID_CLIENT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_Client" FromRole="Client" ToRole="Order" />
         </EntityType>
         <EntityType Name="Detail">
           <Key>
@@ -59,19 +145,109 @@
           </Key>
           <Property Name="ID_DETAIL" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Sklad" Relationship="Self.FK_Sklad_Detail" FromRole="Detail" ToRole="Sklad" />
         </EntityType>
-        <EntityContainer Name="auEntities" annotation:LazyLoadingEnabled="true">
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID_ORDER" />
+          </Key>
+          <Property Name="ID_ORDER" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_client" Type="Int32" Nullable="false" />
+          <Property Name="ID_car" Type="Int32" Nullable="false" />
+          <Property Name="ID_detail_on_sklad" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Car" Relationship="Self.FK_Order_Car" FromRole="Order" ToRole="Car" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Order_Client" FromRole="Order" ToRole="Client" />
+          <NavigationProperty Name="Sklad" Relationship="Self.FK_Order_Sklad" FromRole="Order" ToRole="Sklad" />
+        </EntityType>
+        <EntityType Name="Sklad">
+          <Key>
+            <PropertyRef Name="ID_SKLAD" />
+          </Key>
+          <Property Name="ID_SKLAD" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_detail" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Detail" Relationship="Self.FK_Sklad_Detail" FromRole="Sklad" ToRole="Detail" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_Sklad" FromRole="Sklad" ToRole="Order" />
+        </EntityType>
+        <Association Name="FK_Order_Car">
+          <End Role="Car" Type="Self.Car" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Car">
+              <PropertyRef Name="ID_CAR" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ID_car" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID_CLIENT" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ID_client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sklad_Detail">
+          <End Role="Detail" Type="Self.Detail" Multiplicity="1" />
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Detail">
+              <PropertyRef Name="ID_DETAIL" />
+            </Principal>
+            <Dependent Role="Sklad">
+              <PropertyRef Name="ID_detail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Sklad">
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sklad">
+              <PropertyRef Name="ID_SKLAD" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ID_detail_on_sklad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="auEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Car" EntityType="Self.Car" />
           <EntitySet Name="Client" EntityType="Self.Client" />
           <EntitySet Name="Detail" EntityType="Self.Detail" />
+          <EntitySet Name="Order" EntityType="Self.Order" />
+          <EntitySet Name="Sklad" EntityType="Self.Sklad" />
+          <AssociationSet Name="FK_Order_Car" Association="Self.FK_Order_Car">
+            <End Role="Car" EntitySet="Car" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Client" Association="Self.FK_Order_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sklad_Detail" Association="Self.FK_Sklad_Detail">
+            <End Role="Detail" EntitySet="Detail" />
+            <End Role="Sklad" EntitySet="Sklad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Sklad" Association="Self.FK_Order_Sklad">
+            <End Role="Sklad" EntitySet="Sklad" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище auModelContainer" CdmEntityContainer="auEntities">
+        <EntityContainerMapping StorageEntityContainer="Хранилище auModelContainer" CdmEntityContainer="auEntities2">
           <EntitySetMapping Name="Car">
             <EntityTypeMapping TypeName="auModel.Car">
               <MappingFragment StoreEntitySet="Car">
@@ -95,6 +271,26 @@
                 <ScalarProperty Name="ID_DETAIL" ColumnName="ID_DETAIL" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="auModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="ID_ORDER" ColumnName="ID_ORDER" />
+                <ScalarProperty Name="ID_client" ColumnName="ID_client" />
+                <ScalarProperty Name="ID_car" ColumnName="ID_car" />
+                <ScalarProperty Name="ID_detail_on_sklad" ColumnName="ID_detail_on_sklad" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sklad">
+            <EntityTypeMapping TypeName="auModel.Sklad">
+              <MappingFragment StoreEntitySet="Sklad">
+                <ScalarProperty Name="ID_SKLAD" ColumnName="ID_SKLAD" />
+                <ScalarProperty Name="ID_detail" ColumnName="ID_detail" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
