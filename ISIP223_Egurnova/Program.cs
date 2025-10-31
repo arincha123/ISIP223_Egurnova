@@ -39,6 +39,7 @@ namespace ISIP223_Egurnova
         private decimal shtraf { get; set; }
         private decimal obsluga { get; set; }
         private int day {  get; set; }
+        private decimal price_of_zakaz {  get; set; }
 
         private List<Client> tekuchclient;
         private List<Car> tekuchcar;
@@ -52,41 +53,48 @@ namespace ISIP223_Egurnova
             shtraf = 300;
             obsluga = 250;
             day = 1;
+            price_of_zakaz = 0;
 
-
-            int key = mainMenu();
-
-            /* Рандом
-            tekuchdetail = Core.Context.Detail.ToList();
-
-            Detail detail = tekuchdetail[Random.Next(tekuchdetail.Count)];
-
-            Console.WriteLine(detail.Name);*/
-
-            switch (key)
+            while (true)
             {
-                case 1:
-                    {
-                        invent();
-                        break;
-                    }
-                case 2:
-                    {
-                        Order order = gencl();
-                        zakaz(order);
-                        break;
-                    }
-                case 3:
-                    {
-                        remont();
-                        break;
-                    }
+                int key = mainMenu();
+
+                /* Рандом
+                tekuchdetail = Core.Context.Detail.ToList();
+
+                Detail detail = tekuchdetail[Random.Next(tekuchdetail.Count)];
+
+                Console.WriteLine(detail.Name);*/
+
+                switch (key)
+                {
+                    case 1:
+                        {
+                            invent();
+                            break;
+                        }
+                    case 2:
+                        {
+                            zakaz_det();
+                            break;
+                        }
+                    case 3:
+                        {
+                            Order order = gencl();
+                            zakaz(order);
+                            break;
+                        }
+                    case 0:
+                        {
+                            return;
+                        }
+                }
             }
         }
 
         public int mainMenu()
         {
-            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
             Console.WriteLine($"=== БАЛАНС {balance}");
             Console.WriteLine("=== ---------------------------- ===");
             Console.WriteLine("1. Инвентаризация");
@@ -97,6 +105,7 @@ namespace ISIP223_Egurnova
 
             int a = Convert.ToInt32( Console.ReadLine() );
             return a;
+
         }
 
         public void invent()
@@ -130,9 +139,9 @@ namespace ISIP223_Egurnova
 
         public void zakaz(Order order)
         {
-            decimal price_of_zakaz = obsluga + order.Sklad.Detail.Price;
+            price_of_zakaz = obsluga + order.Sklad.Detail.Price;
 
-            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
             Console.WriteLine($"=== БАЛАНС {balance}");
             Console.WriteLine("=== ---------------------------- ===");
             Console.WriteLine($"=== Клиент: {order.Client.Name}");
@@ -158,18 +167,69 @@ namespace ISIP223_Egurnova
             }
         }
 
-
         public void remont()
         {
+            balance += price_of_zakaz;
 
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== БАЛАНС {balance}");
+            Console.WriteLine("=== ---------------------------- ===");
+            Console.WriteLine($"=== Вы выполнили ремонт на сумму: {price_of_zakaz}");
         }
 
         public void shtrafuved()
         {
+            balance -= shtraf;
 
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== БАЛАНС {balance}");
+            Console.WriteLine("=== ---------------------------- ===");
+            Console.WriteLine($"=== Вы отказали клиенту в ремонте, поэтому вы облагаетесь штрафом = {shtraf}");
         }
 
+        public void zakaz_det()
+        {
 
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== БАЛАНС {balance}");
+            Console.WriteLine("=== ---------------------------- ===");
+
+            var detlist = Core.Context.Detail.ToList();
+
+            foreach (var det in detlist)
+            {
+                Console.WriteLine($"ID: {det.ID_DETAIL}\t Name: {det.Name.PadRight(20)}\t Price for 1 shtuka: {det.Price}");
+            }
+
+            Console.WriteLine("Введите ID детали: ");
+            int a = Convert.ToInt32( Console.ReadLine() );
+            Console.WriteLine("Введите количество деталей: ");
+            int b = Convert.ToInt32(Console.ReadLine());
+
+            var currentdet = detlist.FirstOrDefault(d => d.ID_DETAIL == a);
+
+
+            decimal final_sum = currentdet.Price * b;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
 
     }
 
