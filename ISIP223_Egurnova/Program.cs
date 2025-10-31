@@ -35,9 +35,9 @@ namespace ISIP223_Egurnova
     public class Game
     {
 
-        private int balance { get; set; }
-        private int shtraf { get; set; }
-        private int obsluga { get; set; }
+        private decimal balance { get; set; }
+        private decimal shtraf { get; set; }
+        private decimal obsluga { get; set; }
         private int day {  get; set; }
 
         private List<Client> tekuchclient;
@@ -66,14 +66,21 @@ namespace ISIP223_Egurnova
             switch (key)
             {
                 case 1:
-                    invent();
-                    break;
+                    {
+                        invent();
+                        break;
+                    }
                 case 2:
-                    order();
-                    break;
+                    {
+                        Order order = gencl();
+                        zakaz(order);
+                        break;
+                    }
                 case 3:
-                    remont();
-                    break;
+                    {
+                        remont();
+                        break;
+                    }
             }
         }
 
@@ -102,7 +109,7 @@ namespace ISIP223_Egurnova
             }
         }
 
-        public void order()
+        public Order gencl()
         {
             var orderlist = Core.Context.Order.ToList();
             Detail detail = tekuchdetail[Random.Next(tekuchdetail.Count)];
@@ -117,12 +124,51 @@ namespace ISIP223_Egurnova
 
             Core.Context.Order.Add(order);
             Core.Context.SaveChanges();
+
+            return order;
         }
+
+        public void zakaz(Order order)
+        {
+            decimal price_of_zakaz = obsluga + order.Sklad.Detail.Price;
+
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
+            Console.WriteLine($"=== БАЛАНС {balance}");
+            Console.WriteLine("=== ---------------------------- ===");
+            Console.WriteLine($"=== Клиент: {order.Client.Name}");
+            Console.WriteLine($"=== Машина: {order.Car.Mark} - {order.Car.Model}");
+            Console.WriteLine($"=== Деталь: {order.Sklad.Detail.Name}");
+            Console.WriteLine($"=== Стоимость ремонта: {price_of_zakaz}");
+            Console.WriteLine("=== ---------------------------- ===");
+            Console.WriteLine("Обслужим клиента? (y/n)");
+
+            string answer = Console.ReadLine().ToLower();
+
+            switch (answer){
+                case "y": 
+                    {
+                        remont();
+                        break;
+                    }
+                case "n":
+                    {
+                        shtrafuved();
+                        break;
+                    }
+            }
+        }
+
 
         public void remont()
         {
 
         }
+
+        public void shtrafuved()
+        {
+
+        }
+
 
 
     }
