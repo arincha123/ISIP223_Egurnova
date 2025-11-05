@@ -264,5 +264,52 @@ namespace ISIP223_Egurnova
             }
         }
 
+        public void Dostavilli()
+        {
+            var zakaz_list = deliveryspis.Where(zl => zl.DeliveryDay <= day && !zl.IsDelivered).ToList();
+
+            foreach (var zl in zakaz_list.ToList())
+            {
+                var skladItem = Core.Context.Sklad.FirstOrDefault(s => s.ID_detail == zl.ID_detail);
+                var detail = Core.Context.Detail.FirstOrDefault(d => d.ID_DETAIL == zl.ID_detail);
+                string detailName;
+
+                if (detail != null)
+                {
+                    detailName = detail.Name;
+                }
+                else
+                {
+                    detailName = "Неизвестная деталь";
+                }
+
+                if (skladItem != null)
+                {
+                    skladItem.Quantity += zl.Quantity;
+                }
+                else
+                {
+                    skladItem = new Sklad
+                    {
+                        ID_detail = zl.ID_detail,
+                        Quantity = zl.Quantity
+                    };
+                    Core.Context.Sklad.Add(skladItem);
+                }
+
+                zl.IsDelivered = true;
+                deliveryspis.Remove(zl);
+
+                Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
+                Console.WriteLine($"=== БАЛАНС {balance}");
+                Console.WriteLine("=== ---------------------------- ===");
+                Console.WriteLine($"=== Доставлен заказ: {detailName} x{zl.Quantity}");
+            }
+
+            if (zakaz_list.Any())
+            {
+                Core.Context.SaveChanges();
+            }
+        }
     }
 }
