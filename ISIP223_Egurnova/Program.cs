@@ -87,7 +87,7 @@ namespace ISIP223_Egurnova
                         }
                     case 2:
                         {
-                            //zakaz_det();
+                            zakaz_det();
                             break;
                         }
                     case 3:
@@ -200,5 +200,69 @@ namespace ISIP223_Egurnova
             Console.WriteLine("=== ---------------------------- ===");
             Console.WriteLine($"=== Вы отказали клиенту в ремонте, поэтому вы облагаетесь штрафом = {shtraf}");
         }
+
+        public List<DeliveryOrder> deliveryspis = new List<DeliveryOrder>();
+
+        public void zakaz_det()
+        {
+
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== БАЛАНС {balance}");
+            Console.WriteLine("=== ---------------------------- ===");
+
+            var detlist = Core.Context.Detail.ToList();
+
+            foreach (var det in detlist)
+            {
+                Console.WriteLine($"ID: {det.ID_DETAIL}\t Name: {det.Name.PadRight(20)}\t Price for 1 shtuka: {det.Price}");
+            }
+
+            Console.WriteLine("Введите ID детали: ");
+            int a = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите количество деталей: ");
+            int b = Convert.ToInt32(Console.ReadLine());
+
+
+            var currentdet = detlist.FirstOrDefault(d => d.ID_DETAIL == a);
+
+
+            if (currentdet == null)
+            {
+                Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
+                Console.WriteLine($"=== БАЛАНС {balance}");
+                Console.WriteLine("=== ---------------------------- ===");
+                Console.WriteLine($"=== Деталей с таким ID не существует");
+                Console.ReadKey();
+                return;
+            }
+
+            decimal final_sum = currentdet.Price * b;
+
+            if (balance >= final_sum)
+            {
+                deliveryspis.Add(new DeliveryOrder
+                {
+                    ID_detail = a,
+                    Quantity = b,
+                    OrderDay = day,
+                    DeliveryDay = day + 2,
+                    TotalCost = final_sum
+                });
+                balance -= final_sum;
+
+                Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
+                Console.WriteLine($"=== БАЛАНС {balance}");
+                Console.WriteLine("=== ---------------------------- ===");
+                Console.WriteLine($"=== Детали заказаны. Ожидайте 2 дня");
+            }
+            else
+            {
+                Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
+                Console.WriteLine($"=== БАЛАНС {balance}");
+                Console.WriteLine("=== ---------------------------- ===");
+                Console.WriteLine($"=== Недостаточно средств на балансе");
+            }
+        }
+
     }
 }
