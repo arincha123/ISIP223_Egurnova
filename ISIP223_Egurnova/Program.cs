@@ -31,6 +31,17 @@ namespace ISIP223_Egurnova
         }
     }
 
+    public class DeliveryOrder
+    {
+        public int ID_detail { get; set; }
+        public int Quantity { get; set; }
+        public int OrderDay { get; set; }
+        public int DeliveryDay { get; set; }
+        public decimal TotalCost { get; set; }
+        public bool IsDelivered { get; set; }
+
+        public virtual Detail Detail { get; set; }
+    }
 
     public class Game
     {
@@ -38,8 +49,8 @@ namespace ISIP223_Egurnova
         private decimal balance { get; set; }
         private decimal shtraf { get; set; }
         private decimal obsluga { get; set; }
-        private int day {  get; set; }
-        private decimal price_of_zakaz {  get; set; }
+        private int day { get; set; }
+        private decimal price_of_zakaz { get; set; }
 
         private List<Client> tekuchclient;
         private List<Car> tekuchcar;
@@ -58,6 +69,7 @@ namespace ISIP223_Egurnova
             while (true)
             {
                 int key = mainMenu();
+                //Dostavilli();
 
                 /* Рандом
                 tekuchdetail = Core.Context.Detail.ToList();
@@ -75,7 +87,7 @@ namespace ISIP223_Egurnova
                         }
                     case 2:
                         {
-                            zakaz_det();
+                            //zakaz_det();
                             break;
                         }
                     case 3:
@@ -103,7 +115,7 @@ namespace ISIP223_Egurnova
             Console.WriteLine(" ");
             Console.WriteLine("0. Выйти из игры ");
 
-            int a = Convert.ToInt32( Console.ReadLine() );
+            int a = Convert.ToInt32(Console.ReadLine());
             return a;
 
         }
@@ -112,7 +124,7 @@ namespace ISIP223_Egurnova
         {
             var detfromsklad = Core.Context.Sklad.ToList();
 
-            foreach ( var det in detfromsklad)
+            foreach (var det in detfromsklad)
             {
                 Console.WriteLine($"ID: {det.Detail.ID_DETAIL}\t Name: {det.Detail.Name.PadRight(20)}\t Quantity: {det.Quantity.ToString().PadRight(5)}\t Price for 1 shtuka: {det.Detail.Price}");
             }
@@ -123,7 +135,8 @@ namespace ISIP223_Egurnova
             var orderlist = Core.Context.Order.ToList();
             Detail detail = tekuchdetail[Random.Next(tekuchdetail.Count)];
 
-            Order order = new Order {
+            Order order = new Order
+            {
                 ID_car = tekuchcar[Random.Next(tekuchcar.Count)].ID_CAR,
                 ID_client = tekuchclient[Random.Next(tekuchclient.Count)].ID_CLIENT,
                 ID_detail_on_sklad = detail.ID_DETAIL,
@@ -153,8 +166,9 @@ namespace ISIP223_Egurnova
 
             string answer = Console.ReadLine().ToLower();
 
-            switch (answer){
-                case "y": 
+            switch (answer)
+            {
+                case "y":
                     {
                         remont();
                         break;
@@ -186,65 +200,5 @@ namespace ISIP223_Egurnova
             Console.WriteLine("=== ---------------------------- ===");
             Console.WriteLine($"=== Вы отказали клиенту в ремонте, поэтому вы облагаетесь штрафом = {shtraf}");
         }
-
-        public void zakaz_det()
-        {
-
-            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
-            Console.WriteLine($"=== БАЛАНС {balance}");
-            Console.WriteLine("=== ---------------------------- ===");
-
-            var detlist = Core.Context.Detail.ToList();
-
-            foreach (var det in detlist)
-            {
-                Console.WriteLine($"ID: {det.ID_DETAIL}\t Name: {det.Name.PadRight(20)}\t Price for 1 shtuka: {det.Price}");
-            }
-
-            Console.WriteLine("Введите ID детали: ");
-            int a = Convert.ToInt32( Console.ReadLine() );
-            Console.WriteLine("Введите количество деталей: ");
-            int b = Convert.ToInt32(Console.ReadLine());
-
-            var currentdet = detlist.FirstOrDefault(d => d.ID_DETAIL == a);
-
-
-            decimal final_sum = currentdet.Price * b;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
