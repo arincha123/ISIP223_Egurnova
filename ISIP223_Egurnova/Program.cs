@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.SqlTypes;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,9 +54,9 @@ namespace ISIP223_Egurnova
         private int day { get; set; }
         private decimal price_of_zakaz { get; set; }
 
-        private List<Client> tekuchclient;
-        private List<Car> tekuchcar;
-        private List<Detail> tekuchdetail;
+        private List<Client> allclient;
+        private List<Car> allcar;
+        private List<Detail> alldetail;
 
         Random Random = new Random();
 
@@ -66,10 +68,16 @@ namespace ISIP223_Egurnova
             day = 1;
             price_of_zakaz = 0;
 
+
+            allclient = Core.Context.Client.ToList();
+            allcar = Core.Context.Car.ToList();
+            alldetail = Core.Context.Detail.ToList();
+
+
             while (true)
             {
                 int key = mainMenu();
-                //Dostavilli();
+                Dostavilli();
 
                 /* Рандом
                 tekuchdetail = Core.Context.Detail.ToList();
@@ -83,6 +91,7 @@ namespace ISIP223_Egurnova
                     case 1:
                         {
                             invent();
+                            day--;
                             break;
                         }
                     case 2:
@@ -101,12 +110,13 @@ namespace ISIP223_Egurnova
                             return;
                         }
                 }
+                day++;
             }
         }
 
         public int mainMenu()
         {
-            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
             Console.WriteLine($"=== БАЛАНС {balance}");
             Console.WriteLine("=== ---------------------------- ===");
             Console.WriteLine("1. Инвентаризация");
@@ -133,12 +143,12 @@ namespace ISIP223_Egurnova
         public Order gencl()
         {
             var orderlist = Core.Context.Order.ToList();
-            Detail detail = tekuchdetail[Random.Next(tekuchdetail.Count)];
+            Detail detail = alldetail[Random.Next(alldetail.Count)];
 
             Order order = new Order
             {
-                ID_car = tekuchcar[Random.Next(tekuchcar.Count)].ID_CAR,
-                ID_client = tekuchclient[Random.Next(tekuchclient.Count)].ID_CLIENT,
+                ID_car = allcar[Random.Next(allcar.Count)].ID_CAR,
+                ID_client = allclient[Random.Next(allclient.Count)].ID_CLIENT,
                 ID_detail_on_sklad = detail.ID_DETAIL,
                 Price = detail.Price
 
@@ -152,32 +162,45 @@ namespace ISIP223_Egurnova
 
         public void zakaz(Order order)
         {
-            price_of_zakaz = obsluga + order.Sklad.Detail.Price;
+            var tekuchdetail = Core.Context.Detail.FirstOrDefault(t => t.ID_DETAIL == order.ID_detail_on_sklad);
+            price_of_zakaz = obsluga + tekuchdetail.Price;
 
-            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
             Console.WriteLine($"=== БАЛАНС {balance}");
             Console.WriteLine("=== ---------------------------- ===");
             Console.WriteLine($"=== Клиент: {order.Client.Name}");
             Console.WriteLine($"=== Машина: {order.Car.Mark} - {order.Car.Model}");
-            Console.WriteLine($"=== Деталь: {order.Sklad.Detail.Name}");
+            Console.WriteLine($"=== Деталь: {tekuchdetail.Name}");
             Console.WriteLine($"=== Стоимость ремонта: {price_of_zakaz}");
             Console.WriteLine("=== ---------------------------- ===");
-            Console.WriteLine("Обслужим клиента? (y/n)");
+            
+            var skladdet = Core.Context.Sklad.ToList();
+            var esttli = skladdet.FirstOrDefault(e => e.ID_detail == tekuchdetail.ID_DETAIL);
 
-            string answer = Console.ReadLine().ToLower();
-
-            switch (answer)
+            if (esttli.Quantity != 0)
             {
-                case "y":
-                    {
-                        remont();
-                        break;
-                    }
-                case "n":
-                    {
-                        shtrafuved();
-                        break;
-                    }
+                Console.WriteLine("Обслужим клиента? (y/n)");
+                string answer = Console.ReadLine().ToLower();
+
+                switch (answer)
+                {
+                    case "y":
+                        {
+                            remont();
+                            esttli.Quantity--;
+                            break;
+                        }
+                    case "n":
+                        {
+                            shtrafuved();
+                            break;
+                        }
+                }
+            } 
+            else {
+                Console.WriteLine("Такой детали нет на складе");
+                balance -= shtraf * 2;
+                Console.WriteLine($"Вам нужно выдать компенсацию клиенту: {shtraf * 2}");
             }
         }
 
@@ -185,17 +208,19 @@ namespace ISIP223_Egurnova
         {
             balance += price_of_zakaz;
 
-            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
             Console.WriteLine($"=== БАЛАНС {balance}");
             Console.WriteLine("=== ---------------------------- ===");
             Console.WriteLine($"=== Вы выполнили ремонт на сумму: {price_of_zakaz}");
+
+
         }
 
         public void shtrafuved()
         {
             balance -= shtraf;
 
-            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
             Console.WriteLine($"=== БАЛАНС {balance}");
             Console.WriteLine("=== ---------------------------- ===");
             Console.WriteLine($"=== Вы отказали клиенту в ремонте, поэтому вы облагаетесь штрафом = {shtraf}");
@@ -206,7 +231,7 @@ namespace ISIP223_Egurnova
         public void zakaz_det()
         {
 
-            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day++}");
+            Console.WriteLine($"=== АВТОМАСТЕРСКАЯ === === ДЕНЬ {day}");
             Console.WriteLine($"=== БАЛАНС {balance}");
             Console.WriteLine("=== ---------------------------- ===");
 
