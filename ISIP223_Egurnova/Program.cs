@@ -238,6 +238,45 @@ namespace ISIP223_Egurnova
         //Меню личного кабинета
         //
         //1. Даёт возможность просмотреть все товары, просмотреть корзину и историю заказов
+        public void UserMenu(Users useuser)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("======== МАГАЗ ========");
+                Console.WriteLine("=== ЛИЧНЫЙ КАБИНЕТ ===");
+                Console.WriteLine($"Пользователь: {useuser.Name}");
+                Console.WriteLine("-----------------------------");
+                Console.WriteLine("1. Все товары");
+                Console.WriteLine("2. Корзина");
+                Console.WriteLine("3. Заказы");
+                Console.WriteLine(" ");
+                Console.WriteLine("0. Выйти из учётной записи ");
+                Console.WriteLine("-------------------");
+                Console.WriteLine("Выберите действие... ");
+
+                int a = Convert.ToInt32(Console.ReadLine());
+
+                switch (a)
+                {
+                    case 1:
+                        tovariforuser(useuser);
+                        break;
+                    case 2:
+                        userscart(useuser);
+                        break;
+                    case 3:
+                        userorders(useuser);
+                        break;
+                    case 0:
+                        return;
+                    default:
+                        Console.WriteLine("Неверное значение!");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
 
 
         //Меню для взаимодействия с корзиной
