@@ -130,12 +130,109 @@ namespace ISIP223_Egurnova
         //3. Если все прошло успешно создаёт экземпляр класса пользователя из БД и заполняет его введёнными данными
         //4. Добавляет нового пользователя и возвращается в меню
 
+        public void registr()
+        {
+            Console.Clear();
+            Console.WriteLine("========= МАГАЗ =========");
+            Console.WriteLine("====== РЕГИСТРАЦИЯ ======");
+            Console.WriteLine("-------------------");
+
+            Console.WriteLine("Введите логин:");
+            var login = Console.ReadLine();
+
+            var useuse = Core.Context.Users.FirstOrDefault(u => u.Login == login);
+
+            if (useuse != null)
+            {
+                Console.WriteLine("Пользователь с таким логином уже существует");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Введите пароль:");
+            var password1 = Console.ReadLine();
+            Console.WriteLine("Подтвердите пароль:");
+            var password2 = Console.ReadLine();
+
+            if (password1 != password2)
+            {
+                Console.WriteLine("Пароли не совпадают");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Введите ваше имя: ");
+            var name = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password1) || string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Все поля обязательны для заполнения!");
+                Console.ReadKey();
+                return;
+            }
+
+            try
+            {
+                var newUser = new Users
+                {
+                    Login = login,
+                    Password = password1,
+                    Name = name
+                };
+
+                Core.Context.Users.Add(newUser);
+                Core.Context.SaveChanges();
+
+                Console.WriteLine("Регистрация прошла успешно! Теперь вы можете войти в систему.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при регистрации: {ex.Message}");
+            }
+
+            Console.ReadKey();
+        }
+
 
         //Вход в уже зарегистрированного пользователя
         //
         //1. Проверяет логин и пароль 
         //2. Ищет по уже существующим пользовтелям совпадение
         //3. Если находит, то показывает пользовательское меню (личный кабинет)
+
+        public void login()
+        {
+            Console.Clear();
+            Console.WriteLine("=========== МАГАЗ ===========");
+            Console.WriteLine("=== ВХОД В УЧЁТНУЮ ЗАПИСЬ ===");
+            Console.WriteLine("-----------------------------");
+
+            Console.WriteLine("Введите логин: ");
+            var login = Console.ReadLine();
+
+            Console.WriteLine("Введите пароль: ");
+            var password = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+            {
+                Console.WriteLine("Введите логин и пароль!!!");
+                Console.ReadKey();
+                return;
+            }
+
+            var useuser = Core.Context.Users.FirstOrDefault(u => u.Login == login && u.Password == password);
+            if (useuser == null)
+            {
+                Console.WriteLine("Неверный логин или пароль");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine($"Добро пожаловать, {useuser.Name}!");
+            Console.ReadKey();
+
+            UserMenu(useuser);
+        }
 
 
         //Меню личного кабинета
@@ -158,3 +255,4 @@ namespace ISIP223_Egurnova
 
 
     }
+}
