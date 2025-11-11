@@ -284,6 +284,44 @@ namespace ISIP223_Egurnova
         //
         //1. Выбирает по айдишнику товар, записывает количество
         //2. Формирует объект класса Корзина товаров и заполняет введёнными данными
+        public void tovariforuser(Users useuser)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("====== МАГАЗ ======");
+                Console.WriteLine("====== ТОВАРЫ ===== ");
+                Console.WriteLine("-------------------");
+
+                var listtov = Core.Context.Tovari.ToList();
+
+                foreach (var item in listtov)
+                {
+                    Console.WriteLine($"ID: {item.ID_Tovar}\t Название: {item.Name.PadRight(20)}\t Цена: {item.Price.ToString().PadRight(10)}\tВ наличае: {item.Quantity} шт.");
+                }
+
+                Console.WriteLine("Выберите действие: ");
+                Console.WriteLine("1. Добавить товар в корзину");
+                Console.WriteLine("2. Вернуться назад");
+                Console.WriteLine("-------------------");
+
+                int a = Convert.ToInt32(Console.ReadLine());
+
+                switch (a)
+                {
+                    case 1:
+                        addincart(useuser);
+                        break;
+                    case 2:
+                        return;
+                    default:
+                        Console.WriteLine("Неверное значение!");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
 
 
         //Корзина пользователя
