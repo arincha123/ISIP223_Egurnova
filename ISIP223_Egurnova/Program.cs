@@ -15,10 +15,20 @@ namespace ISIP223_Egurnova
         }
     }
 
+    public class ToverinOrder
+    {
+        public int ID_order { get; set; }
+        public int ID_tovar { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+    }
+
     public class Marketplace
     {
         public decimal totaltov { get; set; }
         public decimal totalsum { get; set; }
+
+        public List<CartofTovari> cartoftovari;
 
         public void Start()
         {
@@ -514,6 +524,92 @@ namespace ISIP223_Egurnova
             catch (Exception ex)
             {
                 Console.WriteLine($"Ошибка при удалении: {ex.Message}");
+            }
+
+            Console.ReadKey();
+        }
+
+       //Оформление заказов
+       //
+       //1. выбираете пункт выдачи
+       //2. Показываются все товары, которые есть в корзине, и общая цена
+
+        public void orderorder(Users useuser, Carts cart, List<CartofTovari> cartoftovari)
+        {
+            Console.Clear();
+            Console.WriteLine("=========== МАГАЗ ============");
+            Console.WriteLine("===== ОФОРМЛЕНИЕ ЗАКАЗОВ =====");
+            Console.WriteLine("------------------------------");
+
+            var pickupPoints = Core.Context.PickupPoint.ToList();
+
+            Console.WriteLine("Доступные пункты выдачи:");
+            foreach (var point in pickupPoints)
+            {
+                Console.WriteLine($"ID: {point.ID_PickupPoint} - {point.Name}");
+            }
+
+            Console.Write("Выберите ID пункта выдачи: ");
+            int pintid = Convert.ToInt32(Console.ReadLine());
+
+            var searchpoint = pickupPoints.FirstOrDefault(sp => sp.ID_PickupPoint == pintid);
+            if (searchpoint == null)
+            {
+                Console.WriteLine("Неверный ID пункта выдачи!");
+                Console.ReadKey();
+                return;
+            }
+
+            try
+            {
+                decimal total = 0;
+                foreach (var cartItem in cartoftovari)
+                {
+                    var tovar = Core.Context.Tovari.FirstOrDefault(t => t.ID_Tovar == cartItem.ID_tovar);
+                    if (tovar != null)
+                    {
+                        total += cartItem.Quantity * tovar.Price;
+                    }
+                }
+
+                var order = new Orders
+                {
+                    ID_user = useuser.ID_User,
+                    ID_pickuppoint = pintid,
+                    Date = DateTime.Now,
+                    TotalPrice = total
+                };
+                Core.Context.Orders.Add(order);
+                Core.Context.SaveChanges();
+
+                foreach (var cartItem in cartoftovari)
+                {
+                    var tovar = Core.Context.Tovari.FirstOrDefault(t => t.ID_Tovar == cartItem.ID_tovar);
+                    if (tovar != null)
+                    {
+                        var tovertinorder = new ToverinOrder
+                        {
+                            ID_order = order.ID_Order,
+                            ID_tovar = cartItem.ID_tovar,
+                            Quantity = cartItem.Quantity,
+                            UnitPrice = tovar.Price
+                        };
+                        Core.Context.ToverinOrder.Add(tovertinorder);
+
+                        tovar.Quantity -= cartItem.Quantity;
+                    }
+                }
+
+                Core.Context.CartofTovari.RemoveRange(cartoftovari);
+                Core.Context.SaveChanges();
+
+                Console.WriteLine($"Заказ #{order.ID_Order} успешно оформлен!");
+                Console.WriteLine($"Общая сумма: {total} руб.");
+                Console.WriteLine($"Пункт выдачи: {searchpoint.Name}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при оформлении заказа: {ex.Message}");
             }
 
             Console.ReadKey();
