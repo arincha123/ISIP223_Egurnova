@@ -323,6 +323,77 @@ namespace ISIP223_Egurnova
         }
 
 
+        public void addincart(Users useuser)
+        {
+            Console.Clear();
+            Console.WriteLine("====== ДОБАВЛЕНИЕ В КОРЗИНУ ======");
+
+            var tovi = Core.Context.Tovari.ToList();
+            Console.WriteLine("Введите ID товара");
+            int idtov = Convert.ToInt32(Console.ReadLine());
+
+            var currenttov = tovi.FirstOrDefault(ct => ct.ID_Tovar == idtov);
+            if (currenttov == null)
+            {
+                Console.WriteLine($"Товара с таким ID не существует");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Введите количество товара");
+            int quanttov = Convert.ToInt32(Console.ReadLine());
+
+            if (quanttov > currenttov.Quantity || currenttov.Quantity == 0)
+            {
+                Console.WriteLine("Неверное количество");
+                Console.ReadKey();
+                return;
+            }
+
+            try
+            {
+                var cart = Core.Context.Carts.FirstOrDefault(c => c.ID_user == useuser.ID_User);
+
+                if (cart == null)
+                {
+                    cart = new Carts
+                    {
+                        ID_user = useuser.ID_User,
+                        Date = DateTime.Now
+                    };
+                    Core.Context.Carts.Add(cart);
+                    Core.Context.SaveChanges();
+                }
+
+                var estincart = Core.Context.CartofTovari.FirstOrDefault(ci => ci.ID_cart == cart.ID_Cart && ci.ID_tovar == idtov);
+
+                if (estincart != null)
+                {
+                    estincart.Quantity += quanttov;
+                }
+                else
+                {
+                    var cartofTovari = new CartofTovari
+                    {
+                        ID_cart = cart.ID_Cart,
+                        ID_tovar = idtov,
+                        Quantity = quanttov
+                    };
+                    Core.Context.CartofTovari.Add(cartofTovari);
+                }
+
+                Core.Context.SaveChanges();
+                Console.WriteLine($"Товар '{currenttov.Name}' добавлен в корзину!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при добавлении в корзину: {ex.Message}");
+            }
+
+            Console.ReadKey();
+        }
+
+
 
         //Корзина пользователя
         //
@@ -330,6 +401,123 @@ namespace ISIP223_Egurnova
         //2. Позволяет удалить товар из корзины, оформитьь заказ или вернуться в меню
         //
 
+        public void userscart(Users useuser)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("====== МАГАЗ ======");
+                Console.WriteLine("===== КОРЗИНА =====");
+                Console.WriteLine("-------------------");
+
+                var cart = Core.Context.Carts.FirstOrDefault(c => c.ID_user == useuser.ID_User);
+
+                if (cart == null)
+                {
+                    Console.WriteLine("Ваша корзина пуста!");
+                    Console.ReadKey();
+                    return;
+                }
+
+                var tovariincart = Core.Context.CartofTovari.Where(ci => ci.ID_cart == cart.ID_Cart).ToList();
+
+                if (!tovariincart.Any())
+                {
+                    Console.WriteLine("Ваша корзина пуста!");
+                    Console.ReadKey();
+                    return;
+                }
+
+                totalsum = 0;
+                foreach (var tov in tovariincart)
+                {
+                    var tovar = Core.Context.Tovari.FirstOrDefault(t => t.ID_Tovar == tov.ID_tovar);
+                    if (tovar != null)
+                    {
+                        totaltov = tov.Quantity * tovar.Price;
+                        totalsum += totaltov;
+
+                        Console.WriteLine($"ID в корзине: {tovar.ID_Tovar}\t Название: {tovar.Name.PadRight(20)}\t Цена за шт: {tovar.Price.ToString().PadRight(10)}\t Количество: {tov.Quantity} шт.\t Сумма: {totaltov} руб.");
+                        Console.WriteLine("-----------------------");
+                    }
+                }
+
+                Console.WriteLine($"Общая сумма: {totalsum} руб.");
+                Console.WriteLine("1. Оформить заказ");
+                Console.WriteLine("2. Удалить товар из корзины");
+                Console.WriteLine("3. Вернуться в меню");
+                Console.Write("Выберите действие: ");
+
+                int a = Convert.ToInt32(Console.ReadLine());
+
+                switch (a)
+                {
+                    case 1:
+                        orderorder(useuser, cart, tovariincart);
+                        break;
+                    case 2:
+                        deltetov(useuser);
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        Console.WriteLine("Неверное значение!");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+
+        //Удаление товара из корзины
+        //
+        //1. Ищет по ID товары в корзине
+        //2. Если нашёл, то удаляет
+        //
+
+
+        public void deltetov(Users useuser)
+        {
+            Console.Clear();
+            Console.WriteLine("====== УДАЛЕНИЕ ИЗ КОРЗИНЫ ======");
+
+            Console.Write("Введите ID товара в корзине для удаления: ");
+            int cartItemId = Convert.ToInt32(Console.ReadLine());
+
+            var cart = Core.Context.Carts.FirstOrDefault(c => c.ID_user == useuser.ID_User);
+            if (cart == null)
+            {
+                Console.WriteLine("Корзина не найдена!");
+                Console.ReadKey();
+                return;
+            }
+
+            var cartItem = Core.Context.CartofTovari.FirstOrDefault(ci => ci.ID_cartoftovari == cartItemId && ci.ID_cart == cart.ID_Cart);
+
+            if (cartItem == null)
+            {
+                Console.WriteLine("Товар с таким ID не найден в вашей корзине!");
+                Console.ReadKey();
+                return;
+            }
+
+            try
+            {
+                var tovar = Core.Context.Tovari.FirstOrDefault(t => t.ID_Tovar == cartItem.ID_tovar);
+                string productName = tovar?.Name ?? "Неизвестный товар";
+
+                Core.Context.CartofTovari.Remove(cartItem);
+                Core.Context.SaveChanges();
+
+                Console.WriteLine($"Товар '{productName}' удален из корзины!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при удалении: {ex.Message}");
+            }
+
+            Console.ReadKey();
+        }
 
     }
 }
