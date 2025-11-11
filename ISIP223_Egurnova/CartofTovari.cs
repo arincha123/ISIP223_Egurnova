@@ -18,5 +18,8 @@ namespace ISIP223_Egurnova
         public int ID_cart { get; set; }
         public int ID_tovar { get; set; }
         public int Quantity { get; set; }
+    
+        public virtual Carts Carts { get; set; }
+        public virtual Tovari Tovari { get; set; }
     }
 }

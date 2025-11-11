@@ -11,6 +11,11 @@
         <EntityTypeShape EntityType="amarkModel.PickupPoint" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="amarkModel.Tovari" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="amarkModel.Users" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="amarkModel.FK_CartofTovari_Carts" />
+        <AssociationConnector Association="amarkModel.FK_CartofTovari_Tovari" />
+        <AssociationConnector Association="amarkModel.FK_Carts_Users" />
+        <AssociationConnector Association="amarkModel.FK_Orders_PickupPoint" />
+        <AssociationConnector Association="amarkModel.FK_Orders_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

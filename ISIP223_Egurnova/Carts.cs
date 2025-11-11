@@ -14,8 +14,18 @@ namespace ISIP223_Egurnova
     
     public partial class Carts
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Carts()
+        {
+            this.CartofTovari = new HashSet<CartofTovari>();
+        }
+    
         public int ID_Cart { get; set; }
         public int ID_user { get; set; }
         public System.DateTime Date { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CartofTovari> CartofTovari { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

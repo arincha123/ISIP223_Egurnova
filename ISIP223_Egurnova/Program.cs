@@ -91,7 +91,37 @@ namespace ISIP223_Egurnova
         //Меню входа в аккаунт
         //
         //1. Показывает меню с методами, которые можно выбрать
+        public void account()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"====== МАГАЗ ======");
+                Console.WriteLine("-------------------");
+                Console.WriteLine("1. Зарегистрироваться");
+                Console.WriteLine("2. Войти в учётную запись");
+                Console.WriteLine("0. Назад");
+                Console.WriteLine("-------------------");
+                Console.WriteLine("Выберите действие... ");
 
+                int a = Convert.ToInt32(Console.ReadLine());
+
+                switch (a)
+                {
+                    case 1:
+                        registr();
+                        break;
+                    case 2:
+                        login();
+                        break;
+                    case 0:
+                        return;
+                    default:
+                        Console.WriteLine("Неверное значение!");
+                        break;
+                }
+            }
+        }
 
         //Регистрация
         //

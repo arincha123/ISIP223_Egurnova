@@ -14,7 +14,16 @@ namespace ISIP223_Egurnova
     
     public partial class PickupPoint
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PickupPoint()
+        {
+            this.Orders = new HashSet<Orders>();
+        }
+    
         public int ID_PickupPoint { get; set; }
         public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Orders> Orders { get; set; }
     }
 }

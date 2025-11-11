@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище amarkModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище amarkModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CartofTovari">
           <Key>
             <PropertyRef Name="ID_cartoftovari" />
@@ -57,6 +57,66 @@
           <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <Association Name="FK_CartofTovari_Carts">
+          <End Role="Carts" Type="Self.Carts" Multiplicity="1" />
+          <End Role="CartofTovari" Type="Self.CartofTovari" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carts">
+              <PropertyRef Name="ID_Cart" />
+            </Principal>
+            <Dependent Role="CartofTovari">
+              <PropertyRef Name="ID_cart" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartofTovari_Tovari">
+          <End Role="Tovari" Type="Self.Tovari" Multiplicity="1" />
+          <End Role="CartofTovari" Type="Self.CartofTovari" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tovari">
+              <PropertyRef Name="ID_Tovar" />
+            </Principal>
+            <Dependent Role="CartofTovari">
+              <PropertyRef Name="ID_tovar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Carts_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="Carts">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_PickupPoint">
+          <End Role="PickupPoint" Type="Self.PickupPoint" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PickupPoint">
+              <PropertyRef Name="ID_PickupPoint" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="ID_pickuppoint" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="Хранилище amarkModelContainer">
           <EntitySet Name="CartofTovari" EntityType="Self.CartofTovari" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
@@ -64,9 +124,28 @@
           <EntitySet Name="PickupPoint" EntityType="Self.PickupPoint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tovari" EntityType="Self.Tovari" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CartofTovari_Carts" Association="Self.FK_CartofTovari_Carts">
+            <End Role="Carts" EntitySet="Carts" />
+            <End Role="CartofTovari" EntitySet="CartofTovari" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartofTovari_Tovari" Association="Self.FK_CartofTovari_Tovari">
+            <End Role="Tovari" EntitySet="Tovari" />
+            <End Role="CartofTovari" EntitySet="CartofTovari" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Carts_Users" Association="Self.FK_Carts_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Carts" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_PickupPoint" Association="Self.FK_Orders_PickupPoint">
+            <End Role="PickupPoint" EntitySet="PickupPoint" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="amarkModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -78,6 +157,8 @@
           <Property Name="ID_cart" Type="Int32" Nullable="false" />
           <Property Name="ID_tovar" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Carts" Relationship="amarkModel.FK_CartofTovari_Carts" FromRole="CartofTovari" ToRole="Carts" />
+          <NavigationProperty Name="Tovari" Relationship="amarkModel.FK_CartofTovari_Tovari" FromRole="CartofTovari" ToRole="Tovari" />
         </EntityType>
         <EntityType Name="Carts">
           <Key>
@@ -86,6 +167,8 @@
           <Property Name="ID_Cart" Type="Int32" Nullable="false" />
           <Property Name="ID_user" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="CartofTovari" Relationship="amarkModel.FK_CartofTovari_Carts" FromRole="Carts" ToRole="CartofTovari" />
+          <NavigationProperty Name="Users" Relationship="amarkModel.FK_Carts_Users" FromRole="Carts" ToRole="Users" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -96,6 +179,8 @@
           <Property Name="ID_pickuppoint" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="PickupPoint" Relationship="amarkModel.FK_Orders_PickupPoint" FromRole="Orders" ToRole="PickupPoint" />
+          <NavigationProperty Name="Users" Relationship="amarkModel.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
         </EntityType>
         <EntityType Name="PickupPoint">
           <Key>
@@ -103,6 +188,7 @@
           </Key>
           <Property Name="ID_PickupPoint" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="amarkModel.FK_Orders_PickupPoint" FromRole="PickupPoint" ToRole="Orders" />
         </EntityType>
         <EntityType Name="Tovari">
           <Key>
@@ -112,6 +198,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CartofTovari" Relationship="amarkModel.FK_CartofTovari_Tovari" FromRole="Tovari" ToRole="CartofTovari" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -121,6 +208,8 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Carts" Relationship="amarkModel.FK_Carts_Users" FromRole="Users" ToRole="Carts" />
+          <NavigationProperty Name="Orders" Relationship="amarkModel.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
         </EntityType>
         <EntityContainer Name="amarkEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CartofTovari" EntityType="Self.CartofTovari" />
@@ -129,7 +218,87 @@
           <EntitySet Name="PickupPoint" EntityType="Self.PickupPoint" />
           <EntitySet Name="Tovari" EntityType="Self.Tovari" />
           <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_CartofTovari_Carts" Association="amarkModel.FK_CartofTovari_Carts">
+            <End Role="Carts" EntitySet="Carts" />
+            <End Role="CartofTovari" EntitySet="CartofTovari" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartofTovari_Tovari" Association="amarkModel.FK_CartofTovari_Tovari">
+            <End Role="Tovari" EntitySet="Tovari" />
+            <End Role="CartofTovari" EntitySet="CartofTovari" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Carts_Users" Association="amarkModel.FK_Carts_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Carts" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_PickupPoint" Association="amarkModel.FK_Orders_PickupPoint">
+            <End Role="PickupPoint" EntitySet="PickupPoint" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="amarkModel.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_CartofTovari_Carts">
+          <End Type="amarkModel.Carts" Role="Carts" Multiplicity="1" />
+          <End Type="amarkModel.CartofTovari" Role="CartofTovari" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carts">
+              <PropertyRef Name="ID_Cart" />
+            </Principal>
+            <Dependent Role="CartofTovari">
+              <PropertyRef Name="ID_cart" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartofTovari_Tovari">
+          <End Type="amarkModel.Tovari" Role="Tovari" Multiplicity="1" />
+          <End Type="amarkModel.CartofTovari" Role="CartofTovari" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tovari">
+              <PropertyRef Name="ID_Tovar" />
+            </Principal>
+            <Dependent Role="CartofTovari">
+              <PropertyRef Name="ID_tovar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Carts_Users">
+          <End Type="amarkModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="amarkModel.Carts" Role="Carts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="Carts">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_PickupPoint">
+          <End Type="amarkModel.PickupPoint" Role="PickupPoint" Multiplicity="1" />
+          <End Type="amarkModel.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PickupPoint">
+              <PropertyRef Name="ID_PickupPoint" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="ID_pickuppoint" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Type="amarkModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="amarkModel.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

@@ -19,5 +19,8 @@ namespace ISIP223_Egurnova
         public int ID_pickuppoint { get; set; }
         public System.DateTime Date { get; set; }
         public decimal TotalPrice { get; set; }
+    
+        public virtual PickupPoint PickupPoint { get; set; }
+        public virtual Users Users { get; set; }
     }
 }
