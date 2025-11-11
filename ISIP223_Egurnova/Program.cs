@@ -69,6 +69,24 @@ namespace ISIP223_Egurnova
         //
         //1. Выводит все товары, что есть в базе
 
+        public void tovari()
+        {
+            Console.Clear();
+            Console.WriteLine("====== МАГАЗ ======");
+            Console.WriteLine("====== ТОВАРЫ =====");
+            Console.WriteLine("-------------------");
+
+            var listtov = Core.Context.Tovari.ToList();
+
+            foreach (var item in listtov)
+            {
+                Console.WriteLine($"ID: {item.ID_Tovar}\t Название: {item.Name.PadRight(20)}\t Цена: {item.Price.ToString().PadRight(10)}\tВ наличае: {item.Quantity} шт.");
+            }
+
+            Console.WriteLine("Нажмите любую клавишу для возврата...");
+            Console.ReadKey();
+        }
+
 
         //Меню входа в аккаунт
         //
