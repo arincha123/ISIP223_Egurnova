@@ -26,7 +26,7 @@
           <Key>
             <PropertyRef Name="ID_Order" />
           </Key>
-          <Property Name="ID_Order" Type="int" Nullable="false" />
+          <Property Name="ID_Order" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ID_user" Type="int" Nullable="false" />
           <Property Name="ID_pickuppoint" Type="int" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
@@ -48,15 +48,11 @@
           <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "amark.dbo.TovariInOrders" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="TovariInOrders">
           <Key>
-            <PropertyRef Name="ID_order" />
-            <PropertyRef Name="ID_tovar" />
-            <PropertyRef Name="Quantity" />
-            <PropertyRef Name="Price" />
+            <PropertyRef Name="ID_tovariinorders" />
           </Key>
+          <Property Name="ID_tovariinorders" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ID_order" Type="int" Nullable="false" />
           <Property Name="ID_tovar" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
@@ -161,15 +157,8 @@
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PickupPoint" EntityType="Self.PickupPoint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tovari" EntityType="Self.Tovari" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TovariInOrders" EntityType="Self.TovariInOrders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TovariInOrders" EntityType="Self.TovariInOrders" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [TovariInOrders].[ID_order] AS [ID_order], 
-    [TovariInOrders].[ID_tovar] AS [ID_tovar], 
-    [TovariInOrders].[Quantity] AS [Quantity], 
-    [TovariInOrders].[Price] AS [Price]
-    FROM [dbo].[TovariInOrders] AS [TovariInOrders]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_CartofTovari_Carts" Association="Self.FK_CartofTovari_Carts">
             <End Role="Carts" EntitySet="Carts" />
             <End Role="CartofTovari" EntitySet="CartofTovari" />
@@ -229,7 +218,7 @@
           <Key>
             <PropertyRef Name="ID_Order" />
           </Key>
-          <Property Name="ID_Order" Type="Int32" Nullable="false" />
+          <Property Name="ID_Order" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ID_user" Type="Int32" Nullable="false" />
           <Property Name="ID_pickuppoint" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
@@ -257,6 +246,18 @@
           <NavigationProperty Name="CartofTovari" Relationship="Self.FK_CartofTovari_Tovari" FromRole="Tovari" ToRole="CartofTovari" />
           <NavigationProperty Name="TovariInOrders" Relationship="Self.FK_TovariInOrders_Tovari" FromRole="Tovari" ToRole="TovariInOrders" />
         </EntityType>
+        <EntityType Name="TovariInOrders">
+          <Key>
+            <PropertyRef Name="ID_tovariinorders" />
+          </Key>
+          <Property Name="ID_tovariinorders" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_order" Type="Int32" Nullable="false" />
+          <Property Name="ID_tovar" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_TovariInOrders_Orders" FromRole="TovariInOrders" ToRole="Orders" />
+          <NavigationProperty Name="Tovari" Relationship="Self.FK_TovariInOrders_Tovari" FromRole="TovariInOrders" ToRole="Tovari" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="ID_User" />
@@ -267,20 +268,6 @@
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Carts" Relationship="Self.FK_Carts_Users" FromRole="Users" ToRole="Carts" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
-        </EntityType>
-        <EntityType Name="TovariInOrders">
-          <Key>
-            <PropertyRef Name="ID_order" />
-            <PropertyRef Name="ID_tovar" />
-            <PropertyRef Name="Quantity" />
-            <PropertyRef Name="Price" />
-          </Key>
-          <Property Name="ID_order" Type="Int32" Nullable="false" />
-          <Property Name="ID_tovar" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_TovariInOrders_Orders" FromRole="TovariInOrders" ToRole="Orders" />
-          <NavigationProperty Name="Tovari" Relationship="Self.FK_TovariInOrders_Tovari" FromRole="TovariInOrders" ToRole="Tovari" />
         </EntityType>
         <Association Name="FK_CartofTovari_Carts">
           <End Role="Carts" Type="Self.Carts" Multiplicity="1" />
@@ -372,8 +359,8 @@
           <EntitySet Name="Orders" EntityType="Self.Orders" />
           <EntitySet Name="PickupPoint" EntityType="Self.PickupPoint" />
           <EntitySet Name="Tovari" EntityType="Self.Tovari" />
-          <EntitySet Name="Users" EntityType="Self.Users" />
           <EntitySet Name="TovariInOrders" EntityType="Self.TovariInOrders" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
           <AssociationSet Name="FK_CartofTovari_Carts" Association="Self.FK_CartofTovari_Carts">
             <End Role="Carts" EntitySet="Carts" />
             <End Role="CartofTovari" EntitySet="CartofTovari" />
@@ -457,6 +444,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TovariInOrders">
+            <EntityTypeMapping TypeName="amarkModel.TovariInOrders">
+              <MappingFragment StoreEntitySet="TovariInOrders">
+                <ScalarProperty Name="ID_tovariinorders" ColumnName="ID_tovariinorders" />
+                <ScalarProperty Name="ID_order" ColumnName="ID_order" />
+                <ScalarProperty Name="ID_tovar" ColumnName="ID_tovar" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="amarkModel.Users">
               <MappingFragment StoreEntitySet="Users">
@@ -464,16 +462,6 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TovariInOrders">
-            <EntityTypeMapping TypeName="amarkModel.TovariInOrders">
-              <MappingFragment StoreEntitySet="TovariInOrders">
-                <ScalarProperty Name="ID_order" ColumnName="ID_order" />
-                <ScalarProperty Name="ID_tovar" ColumnName="ID_tovar" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

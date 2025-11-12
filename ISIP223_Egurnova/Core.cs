@@ -8,6 +8,6 @@ namespace ISIP223_Egurnova
 {
     internal class Core
     {
-        public static amarkEntities Context = new amarkEntities();
+        public static amarkEntities1 Context = new amarkEntities1();
     }
 }

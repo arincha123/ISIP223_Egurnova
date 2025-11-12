@@ -328,7 +328,6 @@ namespace ISIP223_Egurnova
 
         public void addincart(Users useuser)
         {
-            Console.Clear();
             Console.WriteLine("====== ДОБАВЛЕНИЕ В КОРЗИНУ ======");
 
             var tovi = Core.Context.Tovari.ToList();
@@ -353,8 +352,8 @@ namespace ISIP223_Egurnova
                 return;
             }
 
-            try
-            {
+            //try
+            //{
                 var cart = Core.Context.Carts.FirstOrDefault(c => c.ID_user == useuser.ID_User);
 
                 if (cart == null)
@@ -387,11 +386,11 @@ namespace ISIP223_Egurnova
 
                 Core.Context.SaveChanges();
                 Console.WriteLine($"Товар '{currenttov.Name}' добавлен в корзину!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при добавлении в корзину: {ex.Message}");
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"Ошибка при добавлении в корзину: {ex.Message}");
+            //}
 
             Console.ReadKey();
         }
@@ -553,8 +552,8 @@ namespace ISIP223_Egurnova
                 return;
             }
 
-            try
-            {
+            //try
+            //{
                 decimal total = 0;
                 foreach (var cartItem in cartoftovari)
                 {
@@ -599,11 +598,11 @@ namespace ISIP223_Egurnova
                 Console.WriteLine($"Заказ #{order.ID_Order} успешно оформлен!");
                 Console.WriteLine($"Общая сумма: {total} руб.");
                 Console.WriteLine($"Пункт выдачи: {searchpoint.Name}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при оформлении заказа: {ex.Message}");
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"Ошибка при оформлении заказа: {ex.Message}");
+            //}
 
             Console.ReadKey();
         }

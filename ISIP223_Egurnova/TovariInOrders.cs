@@ -14,6 +14,7 @@ namespace ISIP223_Egurnova
     
     public partial class TovariInOrders
     {
+        public int ID_tovariinorders { get; set; }
         public int ID_order { get; set; }
         public int ID_tovar { get; set; }
         public int Quantity { get; set; }

@@ -4,14 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="4ad4efbcd6b74470be0114f656764251" Name="Diagram1">
+      <Diagram DiagramId="d6b85a03aab14125a674b90168d520ca" Name="Diagram1">
         <EntityTypeShape EntityType="amarkModel.CartofTovari" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="amarkModel.Carts" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="amarkModel.Orders" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="amarkModel.PickupPoint" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="amarkModel.Tovari" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="amarkModel.TovariInOrders" Width="1.5" PointX="5.25" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="amarkModel.Users" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="amarkModel.TovariInOrders" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="amarkModel.FK_CartofTovari_Carts" ManuallyRouted="false" />
         <AssociationConnector Association="amarkModel.FK_CartofTovari_Tovari" ManuallyRouted="false" />
         <AssociationConnector Association="amarkModel.FK_Carts_Users" ManuallyRouted="false" />

@@ -30,7 +30,7 @@ namespace ISIP223_Egurnova
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<PickupPoint> PickupPoint { get; set; }
         public virtual DbSet<Tovari> Tovari { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<TovariInOrders> TovariInOrders { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
     }
 }
