@@ -14,6 +14,12 @@ namespace ISIP223_Egurnova
     
     public partial class Orders
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Orders()
+        {
+            this.TovariInOrders = new HashSet<TovariInOrders>();
+        }
+    
         public int ID_Order { get; set; }
         public int ID_user { get; set; }
         public int ID_pickuppoint { get; set; }
@@ -22,5 +28,7 @@ namespace ISIP223_Egurnova
     
         public virtual PickupPoint PickupPoint { get; set; }
         public virtual Users Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TovariInOrders> TovariInOrders { get; set; }
     }
 }

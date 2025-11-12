@@ -13,10 +13,10 @@ namespace ISIP223_Egurnova
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class amarkEntities : DbContext
+    public partial class amarkEntities1 : DbContext
     {
-        public amarkEntities()
-            : base("name=amarkEntities")
+        public amarkEntities1()
+            : base("name=amarkEntities1")
         {
         }
     
@@ -31,5 +31,6 @@ namespace ISIP223_Egurnova
         public virtual DbSet<PickupPoint> PickupPoint { get; set; }
         public virtual DbSet<Tovari> Tovari { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<TovariInOrders> TovariInOrders { get; set; }
     }
 }

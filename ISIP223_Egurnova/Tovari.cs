@@ -18,6 +18,7 @@ namespace ISIP223_Egurnova
         public Tovari()
         {
             this.CartofTovari = new HashSet<CartofTovari>();
+            this.TovariInOrders = new HashSet<TovariInOrders>();
         }
     
         public int ID_Tovar { get; set; }
@@ -27,5 +28,7 @@ namespace ISIP223_Egurnova
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartofTovari> CartofTovari { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TovariInOrders> TovariInOrders { get; set; }
     }
 }

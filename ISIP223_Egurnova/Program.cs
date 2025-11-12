@@ -15,13 +15,6 @@ namespace ISIP223_Egurnova
         }
     }
 
-    public class ToverinOrder
-    {
-        public int ID_order { get; set; }
-        public int ID_tovar { get; set; }
-        public int Quantity { get; set; }
-        public decimal UnitPrice { get; set; }
-    }
 
     public class Marketplace
     {
@@ -587,14 +580,14 @@ namespace ISIP223_Egurnova
                     var tovar = Core.Context.Tovari.FirstOrDefault(t => t.ID_Tovar == cartItem.ID_tovar);
                     if (tovar != null)
                     {
-                        var tovertinorder = new ToverinOrder
+                        var tovertinorder = new TovariInOrders
                         {
                             ID_order = order.ID_Order,
                             ID_tovar = cartItem.ID_tovar,
                             Quantity = cartItem.Quantity,
-                            UnitPrice = tovar.Price
+                            Price = tovar.Price
                         };
-                        Core.Context.ToverinOrder.Add(tovertinorder);
+                        Core.Context.TovariInOrders.Add(tovertinorder);
 
                         tovar.Quantity -= cartItem.Quantity;
                     }
@@ -615,5 +608,52 @@ namespace ISIP223_Egurnova
             Console.ReadKey();
         }
 
+        //Составление заказа
+        //
+        //1. Указывается пункт выдачи и товары
+
+        public void userorders(Users useuser)
+        {
+            Console.Clear();
+            Console.WriteLine("====== МАГАЗ ======");
+            Console.WriteLine("===== МОИ ЗАКАЗЫ =====");
+            Console.WriteLine("-------------------");
+
+            var orders = Core.Context.Orders
+                .Where(o => o.ID_user == useuser.ID_User)
+                .OrderByDescending(o => o.Date)
+                .ToList();
+
+            if (!orders.Any())
+            {
+                Console.WriteLine("У вас еще нет заказов!");
+                Console.ReadKey();
+                return;
+            }
+
+            foreach (var order in orders)
+            {
+                Console.WriteLine($"Заказ #{order.ID_Order}");
+                Console.WriteLine($"Дата: {order.Date:dd.MM.yyyy HH:mm}");
+                Console.WriteLine($"Сумма: {order.TotalPrice} руб.");
+
+                var pickupPoint = Core.Context.PickupPoint.FirstOrDefault(p => p.ID_PickupPoint == order.ID_pickuppoint);
+                Console.WriteLine($"Пункт выдачи: {pickupPoint?.Name ?? "Неизвестно"}");
+                var orderItems = Core.Context.TovariInOrders.Where(oi => oi.ID_order == order.ID_Order).ToList();
+                Console.WriteLine("Товары:");
+                foreach (var item in orderItems)
+                {
+                    var tovar = Core.Context.Tovari.FirstOrDefault(t => t.ID_Tovar == item.ID_tovar);
+                    if (tovar != null)
+                    {
+                        Console.WriteLine($"  - {tovar.Name} x {item.Quantity} по {item.Price} руб.");
+                    }
+                }
+                Console.WriteLine("===================================");
+            }
+
+            Console.WriteLine("Нажмите любую клавишу для возврата...");
+            Console.ReadKey();
+        }
     }
 }
