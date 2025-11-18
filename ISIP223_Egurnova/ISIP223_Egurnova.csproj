@@ -43,11 +43,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Armor.cs" />
+    <Compile Include="Model\BossArchmage.cs" />
+    <Compile Include="Model\BossKovalsky.cs" />
+    <Compile Include="Model\BossPestov.cs" />
+    <Compile Include="Model\BossVVG.cs" />
+    <Compile Include="Model\ConsoleColors.cs" />
+    <Compile Include="Model\ConsoleHelper.cs" />
+    <Compile Include="Model\Enemy.cs" />
+    <Compile Include="Model\Goblin.cs" />
+    <Compile Include="Model\Item.cs" />
+    <Compile Include="Model\Mage.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Skeleton.cs" />
+    <Compile Include="Model\Weapon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
