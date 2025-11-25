@@ -51,11 +51,13 @@
     <Compile Include="Model\ConsoleColors.cs" />
     <Compile Include="Model\ConsoleHelper.cs" />
     <Compile Include="Model\Enemy.cs" />
+    <Compile Include="Model\EnemyFactory.cs" />
     <Compile Include="Model\Goblin.cs" />
     <Compile Include="Model\Item.cs" />
     <Compile Include="Model\Mage.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Skeleton.cs" />
+    <Compile Include="Model\Slime.cs" />
     <Compile Include="Model\Weapon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

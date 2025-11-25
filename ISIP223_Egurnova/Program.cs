@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ISIP223_Egurnova.Model;
 
-//рвоарюфдвал
 namespace ISIP223_Egurnova
 {
     internal class Program
