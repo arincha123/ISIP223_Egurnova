@@ -52,8 +52,11 @@
     <Compile Include="Model\ConsoleHelper.cs" />
     <Compile Include="Model\Enemy.cs" />
     <Compile Include="Model\EnemyFactory.cs" />
+    <Compile Include="Model\Game.cs" />
     <Compile Include="Model\Goblin.cs" />
+    <Compile Include="Model\HealthPotion.cs" />
     <Compile Include="Model\Item.cs" />
+    <Compile Include="Model\ItemFactory.cs" />
     <Compile Include="Model\Mage.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Skeleton.cs" />
