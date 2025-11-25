@@ -16,8 +16,8 @@ namespace ISIP223_Egurnova.Model
 
         public Player()
         {
-            Weapon = new Weapon("Ржавый меч", 5, 0, WeaponType.Melee);
-            Armor = new Armor("Потрёпанная кожаная броня", 0, 3, ArmorType.Light);
+            Weapon = ItemFactory.startWeapon();
+            Armor = ItemFactory.startArmor();
         }
 
         public int GetAttack()
